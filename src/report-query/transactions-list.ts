@@ -4,7 +4,7 @@ import {
   IDepartment,
   IDocNum,
   IDueDateMacro, IEndCreatedate, IEndDate,
-  IEndDuedate, IEndModdate, IMemo, IModdateMacro, IName, IPrinted, IQzurl, ISortOrder, IStartCreatedate,
+  IEndDuedate, IEndModdate, IMemo, IModdateMacro, IName, IPrinted, IQzurl, ISortOrder, IStartCreatedate, IStartDate,
   IStartDuedate,
   IStartModdate, ITerm,
   IVendor
@@ -227,6 +227,8 @@ export interface ICleared {
 
 export type TransactionListQuery =
   & IDateMacro
+  & IStartDate
+  & IEndDate
   & IPaymentMethod
   & IDueDateMacro
   & ITransactionType
@@ -238,7 +240,6 @@ export type TransactionListQuery =
   & IStartDuedate
   & IEndDuedate
   & IVendor
-  & IEndDate
   & IMemo
   & IModdateMacro
   & IPrinted

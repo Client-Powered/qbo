@@ -41,11 +41,11 @@ export interface IDocNum {
 }
 
 export interface IStartModdate {
-  start_moddate?: Date
+  start_moddate?: Date | string
 }
 
 export interface IStartDate {
-  start_date?: Date
+  start_date?: Date | string
 }
 
 export interface IDepartment {
@@ -53,11 +53,11 @@ export interface IDepartment {
 }
 
 export interface IStartDuedate {
-  start_duedate?: Date
+  start_duedate?: Date | string
 }
 
 export interface IEndDuedate {
-  end_duedate?: Date
+  end_duedate?: Date | string
 }
 
 export interface IVendor {
@@ -65,7 +65,7 @@ export interface IVendor {
 }
 
 export interface IEndDate {
-  end_date?: Date
+  end_date?: Date | string
 }
 
 export interface IMemo {
@@ -92,7 +92,7 @@ export interface ITerm {
 }
 
 export interface IEndCreatedate {
-  end_createdate?: Date
+  end_createdate?: Date | string
 }
 
 export interface IName {
@@ -104,11 +104,11 @@ export interface ISortOrder {
 }
 
 export interface IStartCreatedate {
-  start_createdate?: Date
+  start_createdate?: Date | string
 }
 
 export interface IEndModdate {
-  end_moddate?: Date
+  end_moddate?: Date | string
 }
 
 export const commasOptionItem = [

@@ -30,11 +30,12 @@
   },
   "compileOnSave": false,
   "include": [
-    "src/**/*.ts"
+    "src/index.ts"
   ],
   "exclude": [
     "node_modules",
     "lib",
-    "src/**/*.unit.test.ts"
+    "src/**/*.unit.test.ts",
+    "_local.ts"
   ]
 }
