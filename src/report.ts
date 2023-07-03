@@ -2,7 +2,7 @@ import { EntitySpecificReport, QBOReportEntityType } from "./types";
 import { Config } from "./config";
 import {
   getJson,
-  getSignalForTimeout,
+  getSignalForTimeout, isISODateString,
   isReportEntity,
   makeRequestURL,
   recastAbortError,
@@ -11,7 +11,7 @@ import {
 } from "./utils";
 import { v4 as uuid } from "uuid";
 import { isCommasOption, ReportQuery } from "./report-query";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 interface CreateReportOpts<T extends QBOReportEntityType> {
   opts?: ReportQuery<T>
@@ -28,6 +28,8 @@ export const createReportOpts = <T extends QBOReportEntityType>({
       newOpts[key] = Array.isArray(value) ? value.join(",") : value;
     } else if (value instanceof Date) {
       newOpts[key] = format(value, "yyyy-MM-dd");
+    } else if (isISODateString(value)) {
+      newOpts[key] = format(parseISO(value), "yyyy-MM-dd");
     } else {
       newOpts[key] = value;
     }
@@ -40,7 +42,7 @@ interface ReportInit {
 }
 export interface ReportArgs<T extends QBOReportEntityType> {
   entity: T,
-  opts: ReportQuery<T>
+  opts?: ReportQuery<T>
 }
 
 export const report = ({

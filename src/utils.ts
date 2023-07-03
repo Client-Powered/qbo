@@ -5,6 +5,7 @@ import {
   QBOReportEntityType, SnakeToCamelCase
 } from "./types";
 import { Config } from "./config";
+import { isValid, parseISO } from "date-fns";
 
 
 export const makeFormBody = (obj: object): URLSearchParams => {
@@ -114,4 +115,15 @@ export const getJson = <T>() => async (res: Response): Promise<T> => {
     throw new Error(`Error in QBO request to url ${res.url}${jsonErrorString}`);
   }
   return res.json();
+};
+
+export const isISODateString = (s: any): s is string => {
+  if (typeof s !== "string") {
+    return false;
+  }
+  try {
+    return isValid(parseISO(s));
+  } catch (error) {
+    return false;
+  }
 };
