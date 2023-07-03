@@ -7,7 +7,7 @@
       ],
       "parserOptions": {
         "project": [
-          "./tsconfig.json"
+          "./tsconfig.eslint.json"
         ]
       }
     }
@@ -17,8 +17,7 @@
     "node": true
   },
   "ignorePatterns": [
-    "node_modules",
-    "./types"
+    "node_modules"
   ],
   "extends": [
     "prettier",
@@ -30,7 +29,7 @@
     "sourceType": "module",
     "tsconfigRootDir": "",
     "project": [
-      "./tsconfig.json"
+      "./tsconfig.eslint.json"
     ]
   },
   "plugins": [

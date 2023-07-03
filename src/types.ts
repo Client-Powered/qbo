@@ -4,8 +4,14 @@ import { CustomerTypeQboData } from "./entity/customer-type";
 import { EmployeeQboData } from "./entity/employee";
 import { NameReportTableTransactionsListColumnQboData } from "./entity/report";
 
-const _queryOperators = [ "=", "IN", "<", ">", "<=", ">=", "LIKE" ] as const;
-export type QueryOperatorType = (typeof _queryOperators)[number];
+export type QueryOperatorType =
+  | "="
+  | "IN"
+  | "<"
+  | ">"
+  | "<="
+  | ">="
+  | "LIKE";
 
 type Capitalize<S extends string> = S extends `${infer T}${infer U}` ? `${Uppercase<T>}${U}` : never;
 
