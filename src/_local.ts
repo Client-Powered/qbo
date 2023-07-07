@@ -22,6 +22,10 @@ if (require.main === module) {
     .then(async client => {
       await client.refreshAccessToken();
 
+      const vendors = await client.query({
+        entity: "account"
+      });
+      console.log(vendors);
       const transactionList = await client.report({
         entity: "transaction_list",
         opts: {

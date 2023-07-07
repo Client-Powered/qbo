@@ -3,6 +3,7 @@ import { CustomerQboData } from "./entity/customer";
 import { CustomerTypeQboData } from "./entity/customer-type";
 import { EmployeeQboData } from "./entity/employee";
 import { NameReportTableTransactionsListColumnQboData } from "./entity/report";
+import { AccountQboData } from "./entity/account";
 
 export type QueryOperatorType =
   | "="
@@ -73,6 +74,7 @@ export type QBOQueryableEntityType = (typeof _qboEntities)[number];
 export const qboQueryableEntities: QBOQueryableEntityType[] = _qboEntities as any;
 
 export type QboQueryableEntityToType = {
+  account: AccountQboData,
   companyInfo: CompanyInfoQboData,
   customer: CustomerQboData,
   customerType: CustomerTypeQboData,
