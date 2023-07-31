@@ -5,6 +5,11 @@ import { EmployeeQboData } from "./entity/employee";
 import { NameReportTableTransactionsListColumnQboData } from "./entity/report";
 import { AccountQboData } from "./entity/account";
 
+export interface Tokens {
+  access_token: string,
+  refresh_token: string
+}
+
 export type QueryOperatorType =
   | "="
   | "IN"

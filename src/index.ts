@@ -1,28 +1,28 @@
-import { DePromisify, RefreshTokenResponse } from "./types";
+import { DePromisify, RefreshTokenResponse, Tokens } from "./types";
 import { basicAuth, getJson, getSignalForTimeout, makeFormBody, recastAbortError } from "./utils";
 import { getConfig } from "./config";
 import * as fs from "fs";
-import { query } from "./query";
+import { list } from "./list";
 import { upsert } from "./upsert";
 import { read } from "./read";
 import { report } from "./report";
 
 export interface ClientArgs {
-  use_sandbox: boolean,
   client_id: string,
   client_secret: string,
   access_token: string,
   refresh_token: string,
   realm_id: string,
-  max_timeout_in_ms?: number
+  max_timeout_in_ms?: number,
+  use_sandbox?: boolean
 }
 const _client = async ({
-  use_sandbox,
   client_id,
   client_secret,
   access_token,
   refresh_token,
   realm_id,
+  use_sandbox = false,
   max_timeout_in_ms,
   ...args
 }: ClientArgs) => {
@@ -82,7 +82,18 @@ const _client = async ({
         config.REALM_ID = null;
       }
     },
-    query: query({ config }),
+    get tokens(): Tokens {
+      const refreshToken = config.REFRESH_TOKEN;
+      const accessToken = config.ACCESS_TOKEN;
+      if (!refreshToken || !accessToken) {
+        throw new Error("No tokens found");
+      }
+      return {
+        access_token: accessToken,
+        refresh_token: refreshToken
+      };
+    },
+    list: list({ config }),
     upsert: upsert({ config }),
     read: read({ config }),
     report: report({ config })

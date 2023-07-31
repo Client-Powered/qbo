@@ -1,4 +1,4 @@
-import { combine, fetchQuery, optsToQueryCondition, QueryOptsBase, QueryOptsInternal } from "./query";
+import { combine, fetchListQuery, optsToListQueryCondition, QueryOptsBase, QueryOptsInternal } from "./list";
 import { QBOQueryableEntityType, SnakeToCamelCase } from "./types";
 import { Config } from "./config";
 
@@ -45,7 +45,7 @@ describe("optsToQuery", () => {
       offset: 0
     };
 
-    const result = optsToQueryCondition<QBOQueryableEntityType>(opts);
+    const result = optsToListQueryCondition<QBOQueryableEntityType>(opts);
 
     expect(result).toEqual("");
   });
@@ -64,7 +64,7 @@ describe("optsToQuery", () => {
       ]
     };
 
-    const result = optsToQueryCondition<"employee">({
+    const result = optsToListQueryCondition<"employee">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -83,7 +83,7 @@ describe("optsToQuery", () => {
       asc: "WebAddr"
     };
 
-    const result = optsToQueryCondition<"customer">({
+    const result = optsToListQueryCondition<"customer">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -112,7 +112,7 @@ describe("optsToQuery", () => {
       ]
     };
 
-    const result = optsToQueryCondition<"employee">({
+    const result = optsToListQueryCondition<"employee">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -142,7 +142,7 @@ describe("optsToQuery", () => {
       ]
     };
 
-    const result = optsToQueryCondition<"employee">({
+    const result = optsToListQueryCondition<"employee">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -165,7 +165,7 @@ describe("optsToQuery", () => {
       asc: "BirthDate"
     };
 
-    const result2 = optsToQueryCondition<"employee">({
+    const result2 = optsToListQueryCondition<"employee">({
       ...(opts2 ?? {}),
       fetch_all: !!opts2?.fetch_all,
       offset: opts2?.offset ?? 1,
@@ -184,7 +184,7 @@ describe("optsToQuery", () => {
       asc: "BirthDate"
     };
 
-    const result = optsToQueryCondition<"employee">({
+    const result = optsToListQueryCondition<"employee">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -201,7 +201,7 @@ describe("optsToQuery", () => {
       desc: "BirthDate"
     };
 
-    const result2 = optsToQueryCondition<"employee">({
+    const result2 = optsToListQueryCondition<"employee">({
       ...(opts2 ?? {}),
       fetch_all: !!opts2?.fetch_all,
       offset: opts2?.offset ?? 1,
@@ -219,7 +219,7 @@ describe("optsToQuery", () => {
       where: []
     };
 
-    const result = optsToQueryCondition<"employee">({
+    const result = optsToListQueryCondition<"employee">({
       ...(opts ?? {}),
       fetch_all: !!opts?.fetch_all,
       offset: opts?.offset ?? 1,
@@ -268,7 +268,7 @@ describe("fetchQuery", () => {
       });
     });
 
-    await fetchQuery({
+    await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
@@ -305,7 +305,7 @@ describe("fetchQuery", () => {
     });
 
     await expect(() => (
-      fetchQuery({
+      fetchListQuery({
         config,
         opts,
         Entity: "Employee",
@@ -340,7 +340,7 @@ describe("fetchQuery", () => {
       json: () => Promise.resolve(expectedData)
     }));
 
-    const result = await fetchQuery({
+    const result = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
@@ -373,7 +373,7 @@ describe("fetchQuery", () => {
         json: () => Promise.resolve({ QueryResponse: { Employee: [] } })
       }));
 
-    const result = await fetchQuery({
+    const result = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
@@ -397,7 +397,7 @@ describe("fetchQuery", () => {
     const fetchFn = jest.fn(() => Promise.reject("Network error"));
 
     try {
-      await fetchQuery({
+      await fetchListQuery({
         config,
         opts,
         Entity: "Employee",
@@ -429,7 +429,7 @@ describe("fetchQuery", () => {
         json: () => Promise.resolve({ QueryResponse: { Employee: [{ Id: "3" }] } })
       }));
 
-    const result = await fetchQuery({
+    const result = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",

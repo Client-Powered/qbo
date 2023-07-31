@@ -1,17 +1,25 @@
 {
-  "name": "qbo-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "typings": "types/index.d.ts",
+  "name": "qbo",
+  "version": "0.1.0",
+  "description": "A client for interfacing with the QBO API.",
+  "repository": "https://github.com/Client-Powered/qbo",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "start": "node --require ts-node/register --require @babel/register src/_local.ts",
     "test": "jest",
-    "build": "npx tsc && npx eslint 'lib/**/*.ts' --fix"
+    "postinstall": "yarn build",
+    "build": "npx tsc"
   },
-  "author": "",
+  "author": "Charles Anderson",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/your-username/qbo-api/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
     "uuid": "^9.0.0"
   },
@@ -24,7 +32,7 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jest": "^29.1.2",
-    "@types/node": "latest",
+    "@types/node": "^20.4.5",
     "@types/node-fetch": "^2.5.7",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.39.0",

@@ -1,6 +1,10 @@
 import fs from "fs";
 import { client } from "./index";
 
+const x = () => {
+
+};
+
 if (require.main === module) {
   require("dotenv").config({
     path: require("path").resolve(require("app-root-path").path, ".env")
@@ -22,7 +26,7 @@ if (require.main === module) {
     .then(async client => {
       await client.refreshAccessToken();
 
-      const vendors = await client.query({
+      const vendors = await client.list({
         entity: "account"
       });
       console.log(vendors);
@@ -44,15 +48,16 @@ if (require.main === module) {
       //   entity: "customer"
       // });
       // console.log(customer2);
-      const employee = await client.query({
-        entity: "employee"
-        // opts: {
-        //   where: [{
-        //     field: "PrimaryEmailAddr",
-        //     operator: "=",
-        //     value: "lg@intuit.com"
-        //   }]
-        // }
+      const employee = await client.list({
+        entity: "employee",
+        opts: {
+          where: [{
+            field: "PrimaryEmailAddr",
+            operator: "=",
+            value: "lg@intuit.com"
+          }],
+          asc: "PrimaryEmailAddr"
+        }
       });
       console.log(employee);
 
@@ -70,7 +75,7 @@ if (require.main === module) {
       const firstCustomer = customer[0];
       const readRes = await client.read({
         entity: "customer",
-        entityId: firstCustomer.Id
+        entity_id: firstCustomer.Id
       });
       console.log(readRes);
       const updatedCustomer = await client.upsert({

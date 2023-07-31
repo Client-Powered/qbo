@@ -5,3 +5,4 @@ tokens.json
 lib
 coverage
 reports
+/lib/

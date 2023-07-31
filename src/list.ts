@@ -19,9 +19,9 @@ import { v4 as uuid } from "uuid";
 
 export const combine = <T extends QBOQueryableEntityType>(
   Entity: SnakeToCamelCase<T>,
-  first: QueryResponse<T>,
-  second: QueryResponse<T>
-): QueryResponse<T> => ({
+  first: ListResponse<T>,
+  second: ListResponse<T>
+): ListResponse<T> => ({
   time: second.time,
   QueryResponse: {
     maxResults: second.QueryResponse.maxResults,
@@ -31,7 +31,7 @@ export const combine = <T extends QBOQueryableEntityType>(
       ...second.QueryResponse[Entity]
     ]
   }
-} as QueryResponse<T>);
+} as ListResponse<T>);
 
 export type StringIfObject<
   T extends QBOQueryableEntityType,
@@ -66,7 +66,7 @@ export type QueryOptsInternal<T extends QBOQueryableEntityType> = Omit<QueryOpts
   offset: number
 };
 
-export const optsToQueryCondition = <T extends QBOQueryableEntityType>(opts: QueryOptsInternal<T>): string => {
+export const optsToListQueryCondition = <T extends QBOQueryableEntityType>(opts: QueryOptsInternal<T>): string => {
   const queryConditionItems: string[] = [];
   if (opts.where && Object.values(opts.where ?? {})?.length) {
     const queryItems: string[] = [];
@@ -90,7 +90,7 @@ export const optsToQueryCondition = <T extends QBOQueryableEntityType>(opts: Que
   return queryConditionItems.join(" ");
 };
 
-interface FetchQuery<T extends QBOQueryableEntityType> {
+interface FetchListQuery<T extends QBOQueryableEntityType> {
   config: Config,
   opts: QueryOptsInternal<T>,
   Entity: SnakeToCamelCase<T>,
@@ -98,20 +98,20 @@ interface FetchQuery<T extends QBOQueryableEntityType> {
   fetchFn: typeof fetch
 }
 
-export const fetchQuery = async <T extends QBOQueryableEntityType>({
+export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   config,
   opts,
   Entity,
   headers,
   fetchFn
-}: FetchQuery<T>): Promise<QueryResponse<T>> => {
+}: FetchListQuery<T>): Promise<ListResponse<T>> => {
   const url = makeRequestURL({
     config,
     path: "/query",
     query_params: {
       limit: opts.limit,
       offset: opts.offset,
-      query: `select * from ${Entity} ${optsToQueryCondition(opts)}`.trim()
+      query: `select * from ${Entity} ${optsToListQueryCondition(opts)}`.trim()
     }
   });
 
@@ -119,7 +119,7 @@ export const fetchQuery = async <T extends QBOQueryableEntityType>({
     headers: headers as any,
     signal: getSignalForTimeout({ config })
   })
-    .then(getJson<QueryResponse<T>>())
+    .then(getJson<ListResponse<T>>())
     .catch(recastAbortError);
 
   if (!opts.fetch_all || data.QueryResponse[Entity]?.length !== opts.limit) {
@@ -128,7 +128,7 @@ export const fetchQuery = async <T extends QBOQueryableEntityType>({
     return combine(
       Entity,
       data,
-      await fetchQuery({
+      await fetchListQuery({
         config,
         opts: {
           ...opts,
@@ -142,16 +142,16 @@ export const fetchQuery = async <T extends QBOQueryableEntityType>({
   }
 };
 
-interface QueryInit {
+interface ListInit {
   config: Config
 }
 
-export interface QueryArgs<T extends QBOQueryableEntityType> {
+export interface ListArgs<T extends QBOQueryableEntityType> {
   entity: T,
   opts?: QueryOptsBase<T>
 }
 
-export type QueryResponse<T extends QBOQueryableEntityType> = {
+export type ListResponse<T extends QBOQueryableEntityType> = {
   time: string,
   QueryResponse: {
     [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
@@ -161,19 +161,19 @@ export type QueryResponse<T extends QBOQueryableEntityType> = {
   }
 };
 
-export const query = ({
+export const list = ({
   config
-}: QueryInit) => async <T extends QBOQueryableEntityType>({
+}: ListInit) => async <T extends QBOQueryableEntityType>({
   entity,
   opts
-}: QueryArgs<T>): Promise<GetQBOQueryableEntityType<T>[]> => {
+}: ListArgs<T>): Promise<GetQBOQueryableEntityType<T>[]> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
 
   const Entity = snakeCaseToCamelCase(entity);
 
-  const data = await fetchQuery<T>({
+  const data = await fetchListQuery<T>({
     config,
     opts: {
       ...(opts ?? {}),
