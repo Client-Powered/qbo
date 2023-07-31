@@ -1,5 +1,7 @@
 # QBO
 
+https://www.npmjs.com/package/qbo
+
 ## Installation
 ```bash
 yarn add qbo
