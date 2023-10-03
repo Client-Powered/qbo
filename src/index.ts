@@ -6,6 +6,10 @@ import { list } from "./list";
 import { upsert } from "./upsert";
 import { read } from "./read";
 import { report } from "./report";
+export { ReportArgs } from "./report";
+export { ReadArgs } from "./read";
+export { UpsertArgs } from "./upsert";
+export { ListArgs } from "./list";
 
 export interface ClientArgs {
   client_id: string,
