@@ -1,5 +1,5 @@
-import { GetEntitySpecificReport, QBOReportEntityType } from "./types";
-import { Config } from "./config";
+import { GetEntitySpecificReport, QBOReportEntityType } from "./lib/types";
+import { Config } from "./lib/config";
 import {
   getJson,
   getSignalForTimeout, isISODateString,
@@ -8,7 +8,7 @@ import {
   recastAbortError,
   snakeCaseToCamelCase,
   tokenAuth
-} from "./utils";
+} from "./lib/utils";
 import { v4 as uuid } from "uuid";
 import { isCommasOption, ReportQuery } from "./report-query";
 import { format, parseISO } from "date-fns";

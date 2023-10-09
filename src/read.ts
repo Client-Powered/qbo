@@ -1,5 +1,5 @@
-import { GetQBOQueryableEntityType, QBOQueryableEntityType, SnakeToCamelCase } from "./types";
-import { Config } from "./config";
+import { GetQBOQueryableEntityType, QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
+import { Config } from "./lib/config";
 import {
   getJson,
   getSignalForTimeout,
@@ -7,7 +7,7 @@ import {
   makeRequestURL,
   recastAbortError, snakeCaseToCamelCase,
   tokenAuth
-} from "./utils";
+} from "./lib/utils";
 import { v4 as uuid } from "uuid";
 
 export type QueryResponse<T extends QBOQueryableEntityType> = {

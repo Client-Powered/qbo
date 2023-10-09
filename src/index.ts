@@ -1,13 +1,13 @@
-import { QBOQueryableEntityType, QBOReportEntityType, RefreshTokenResponse, Tokens } from "./types";
-import { basicAuth, getJson, getSignalForTimeout, makeFormBody, recastAbortError } from "./utils";
-import { getConfig } from "./config";
+import { QBOQueryableEntityType, QBOReportEntityType, RefreshTokenResponse, Tokens } from "./lib/types";
+import { basicAuth, getJson, getSignalForTimeout, makeFormBody, recastAbortError } from "./lib/utils";
+import { getConfig } from "./lib/config";
 import { list, ListArgs, ListResponse } from "./list";
 import { upsert, UpsertArgs, UpsertResponse } from "./upsert";
 import { read, ReadArgs, ReadResponse } from "./read";
 import { report, ReportArgs, ReportResponse } from "./report";
 
 
-export type { Tokens, QBOQueryableEntityType, QBOReportEntityType, GetQBOQueryableEntityType, GetEntitySpecificReport } from "./types";
+export type { Tokens, QBOQueryableEntityType, QBOReportEntityType, GetQBOQueryableEntityType, GetEntitySpecificReport } from "./lib/types";
 export type { ReportArgs, ReportResponse } from "./report";
 export type { ReadArgs, ReadResponse } from "./read";
 export type { UpsertArgs, UpsertResponse } from "./upsert";
