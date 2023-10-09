@@ -20,15 +20,17 @@ export interface DiscoveryConfig {
 }
 
 interface DiscoveryArgs {
-  use_sandbox: boolean
+  use_sandbox: boolean,
+  fetchFn: typeof fetch
 }
 export const discovery = async ({
-  use_sandbox
+  use_sandbox,
+  fetchFn
 }: DiscoveryArgs): Promise<DiscoveryConfig> => {
   const discoveryURL = !use_sandbox
     ? DISCOVERY_URL_LIVE
     : DISCOVERY_URL_SANDBOX;
-  const discoveryResponse = await fetch(discoveryURL, {
+  const discoveryResponse = await fetchFn(discoveryURL, {
     headers: {
       Accept: "application/json"
     }

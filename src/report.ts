@@ -38,22 +38,29 @@ export const createReportOpts = <T extends QBOReportEntityType>({
 };
 
 interface ReportInit {
-  config: Config
+  config: Config,
+  initFetchFn: typeof fetch
 }
 export interface ReportArgs<T extends QBOReportEntityType> {
   entity: T,
-  opts?: ReportQuery<T>
+  opts?: ReportQuery<T>,
+  /** @desc A custom fetch function to use for this report request. This will override any fetchFn passed to the client. */
+  fetchFn?: typeof fetch
 }
 
+export type ReportResponse<T extends QBOReportEntityType> = EntitySpecificReport<T>;
 export const report = ({
-  config
+  config,
+  initFetchFn = fetch
 }: ReportInit) => async <T extends QBOReportEntityType>({
   entity,
-  opts
-}: ReportArgs<T>): Promise<EntitySpecificReport<T>> => {
+  opts,
+  fetchFn: _fetchFn
+}: ReportArgs<T>): Promise<ReportResponse<T>> => {
   if (!isReportEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
+  const fetchFn = _fetchFn ?? initFetchFn;
 
   const queryParams = createReportOpts<T>({ opts });
 
@@ -63,7 +70,7 @@ export const report = ({
     query_params: queryParams
   });
 
-  return fetch(url, {
+  return fetchFn(url, {
     method: "GET",
     headers: {
       "User-Agent": "qbo-api",

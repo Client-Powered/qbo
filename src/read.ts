@@ -17,24 +17,31 @@ export type QueryResponse<T extends QBOQueryableEntityType> = {
 };
 
 interface ReadInit {
-  config: Config
+  config: Config,
+  initFetchFn: typeof fetch
 }
 export interface ReadArgs<T extends QBOQueryableEntityType> {
   entity: T,
-  entity_id: string
+  entity_id: string,
+  /** @desc A custom fetch function to use for this read request. This will override any fetchFn passed to the client. */
+  fetchFn?: typeof fetch
 }
 
+export type ReadResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>;
 export const read = ({
-  config
+  config,
+  initFetchFn = fetch
 }: ReadInit) => async <T extends QBOQueryableEntityType>({
   entity,
-  entity_id
-}: ReadArgs<T>): Promise<GetQBOQueryableEntityType<T>> => {
+  entity_id,
+  fetchFn: _fetchFn
+}: ReadArgs<T>): Promise<ReadResponse<T>> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   } else if (Number.isNaN(Number(entity_id))) {
     throw new Error(`Invalid entity id: ${entity_id}, should be a string of numbers`);
   }
+  const fetchFn = _fetchFn ?? initFetchFn;
 
   const Entity = snakeCaseToCamelCase(entity);
   const url = makeRequestURL({
@@ -42,7 +49,7 @@ export const read = ({
     path: `/${Entity.toLowerCase()}/${entity_id}`
   });
 
-  const data = await fetch(url, {
+  const data = await fetchFn(url, {
     method: "GET",
     headers: {
       "User-Agent": "qbo-api",

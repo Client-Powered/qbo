@@ -1,15 +1,16 @@
-import { DePromisify, RefreshTokenResponse, Tokens } from "./types";
+import { RefreshTokenResponse, Tokens } from "./types";
 import { basicAuth, getJson, getSignalForTimeout, makeFormBody, recastAbortError } from "./utils";
 import { getConfig } from "./config";
-import * as fs from "fs";
 import { list } from "./list";
 import { upsert } from "./upsert";
 import { read } from "./read";
 import { report } from "./report";
-export { ReportArgs } from "./report";
-export { ReadArgs } from "./read";
-export { UpsertArgs } from "./upsert";
-export { ListArgs } from "./list";
+
+export type { ReportArgs, ReportResponse } from "./report";
+export type { ReadArgs, ReadResponse } from "./read";
+export type { UpsertArgs, UpsertResponse } from "./upsert";
+export type { ListArgs, ListResponse } from "./list";
+export type { Tokens };
 
 export interface ClientArgs {
   client_id: string,
@@ -18,9 +19,27 @@ export interface ClientArgs {
   refresh_token: string,
   realm_id: string,
   max_timeout_in_ms?: number,
-  use_sandbox?: boolean
+  use_sandbox?: boolean,
+  /** @desc A custom implementation of fetch to use everywhere in this library instead of the global fetch. */
+  fetchFn?: typeof fetch
 }
-const _client = async ({
+
+export interface QboClient {
+  refreshAccessToken(): Promise<void>,
+  revokeAccess(tokenType: "REFRESH" | "ACCESS"): Promise<void>,
+  get tokens(): Tokens,
+
+  /** @desc Read one QBO entity of a given type by id */
+  read: ReturnType<typeof read>,
+  /** @desc List QBO entities of a given type with optional query parameters */
+  list: ReturnType<typeof list>,
+  /** @desc Update if exists, otherwise insert one QBO entity of a given type */
+  upsert: ReturnType<typeof upsert>,
+  /** @desc Query a QBO report of a given type with optional query parameters */
+  report: ReturnType<typeof report>
+}
+
+export const client = async ({
   client_id,
   client_secret,
   access_token,
@@ -28,9 +47,10 @@ const _client = async ({
   realm_id,
   use_sandbox = false,
   max_timeout_in_ms,
-  ...args
-}: ClientArgs) => {
+  fetchFn = fetch
+}: ClientArgs): Promise<QboClient> => {
   const config = await getConfig({
+    fetchFn,
     use_sandbox: use_sandbox,
     access_token: access_token,
     refresh_token: refresh_token,
@@ -39,7 +59,7 @@ const _client = async ({
   });
   return {
     async refreshAccessToken() {
-      const refreshTokenResponse = await fetch(config.TOKEN_URL, {
+      const refreshTokenResponse = await fetchFn(config.TOKEN_URL, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -56,16 +76,13 @@ const _client = async ({
         .catch(recastAbortError);
       config.REFRESH_TOKEN = refreshTokenResponse.refresh_token;
       config.ACCESS_TOKEN = refreshTokenResponse.access_token;
-      if ((args as any).____write_to_file) {
-        fs.writeFileSync("tokens.json", JSON.stringify({ refresh_token: config.REFRESH_TOKEN, access_token: config.ACCESS_TOKEN }), "utf-8");
-      }
     },
     async revokeAccess(tokenType: "REFRESH" | "ACCESS") {
       const token = tokenType === "REFRESH" ? config.REFRESH_TOKEN : config.ACCESS_TOKEN;
       if (!token) {
         throw new Error(`No ${tokenType} token found to revoke`);
       }
-      const res = await fetch(config.REVOKE_URL, {
+      const res = await fetchFn(config.REVOKE_URL, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -97,31 +114,9 @@ const _client = async ({
         refresh_token: refreshToken
       };
     },
-    list: list({ config }),
-    upsert: upsert({ config }),
-    read: read({ config }),
-    report: report({ config })
+    list: list({ config, initFetchFn: fetchFn }),
+    upsert: upsert({ config, initFetchFn: fetchFn }),
+    read: read({ config, initFetchFn: fetchFn }),
+    report: report({ config, initFetchFn: fetchFn })
   };
 };
-
-export type QboClient = DePromisify<ReturnType<typeof _client>>;
-
-export const client = async ({
-  use_sandbox,
-  client_id,
-  client_secret,
-  access_token,
-  refresh_token,
-  realm_id,
-  max_timeout_in_ms,
-  ...args
-}: ClientArgs): Promise<QboClient> => _client({
-  use_sandbox: use_sandbox,
-  client_id: client_id,
-  client_secret: client_secret,
-  access_token: access_token,
-  refresh_token: refresh_token,
-  realm_id: realm_id,
-  max_timeout_in_ms: max_timeout_in_ms,
-  ...args
-});
