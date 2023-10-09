@@ -1,4 +1,4 @@
-import { EntitySpecificReport, QBOReportEntityType } from "./types";
+import { GetEntitySpecificReport, QBOReportEntityType } from "./types";
 import { Config } from "./config";
 import {
   getJson,
@@ -48,7 +48,7 @@ export interface ReportArgs<T extends QBOReportEntityType> {
   fetchFn?: typeof fetch
 }
 
-export type ReportResponse<T extends QBOReportEntityType> = EntitySpecificReport<T>;
+export type ReportResponse<T extends QBOReportEntityType> = GetEntitySpecificReport<T>;
 export const report = ({
   config,
   initFetchFn = fetch
@@ -81,6 +81,6 @@ export const report = ({
     },
     signal: getSignalForTimeout({ config })
   })
-    .then(getJson<EntitySpecificReport<T>>())
+    .then(getJson<GetEntitySpecificReport<T>>())
     .catch(recastAbortError);
 };

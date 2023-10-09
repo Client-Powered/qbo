@@ -19,9 +19,9 @@ import { v4 as uuid } from "uuid";
 
 export const combine = <T extends QBOQueryableEntityType>(
   Entity: SnakeToCamelCase<T>,
-  first: ListResponse<T>,
-  second: ListResponse<T>
-): ListResponse<T> => ({
+  first: FetchListResponse<T>,
+  second: FetchListResponse<T>
+): FetchListResponse<T> => ({
   time: second.time,
   QueryResponse: {
     maxResults: second.QueryResponse.maxResults,
@@ -31,7 +31,7 @@ export const combine = <T extends QBOQueryableEntityType>(
       ...second.QueryResponse[Entity]
     ]
   }
-} as ListResponse<T>);
+} as FetchListResponse<T>);
 
 export type StringIfObject<
   T extends QBOQueryableEntityType,
@@ -98,13 +98,23 @@ interface FetchListQuery<T extends QBOQueryableEntityType> {
   fetchFn: typeof fetch
 }
 
+
+export type FetchListResponse<T extends QBOQueryableEntityType> = {
+  time: string,
+  QueryResponse: {
+    [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
+  } & {
+    startPosition: number,
+    maxResults: number
+  }
+};
 export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   config,
   opts,
   Entity,
   headers,
   fetchFn
-}: FetchListQuery<T>): Promise<ListResponse<T>> => {
+}: FetchListQuery<T>): Promise<FetchListResponse<T>> => {
   const url = makeRequestURL({
     config,
     path: "/query",
@@ -119,7 +129,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
     headers: headers as any,
     signal: getSignalForTimeout({ config })
   })
-    .then(getJson<ListResponse<T>>())
+    .then(getJson<FetchListResponse<T>>())
     .catch(recastAbortError);
 
   if (!opts.fetch_all || data.QueryResponse[Entity]?.length !== opts.limit) {
@@ -154,16 +164,7 @@ export interface ListArgs<T extends QBOQueryableEntityType> {
   fetchFn?: typeof fetch
 }
 
-export type ListResponse<T extends QBOQueryableEntityType> = {
-  time: string,
-  QueryResponse: {
-    [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
-  } & {
-    startPosition: number,
-    maxResults: number
-  }
-};
-
+export type ListResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>[];
 export const list = ({
   initFetchFn = fetch,
   config
@@ -171,7 +172,7 @@ export const list = ({
   entity,
   opts,
   fetchFn: _fetchFn
-}: ListArgs<T>): Promise<GetQBOQueryableEntityType<T>[]> => {
+}: ListArgs<T>): Promise<ListResponse<T>> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
