@@ -1,16 +1,17 @@
-import { RefreshTokenResponse, Tokens } from "./types";
+import { QBOQueryableEntityType, QBOReportEntityType, RefreshTokenResponse, Tokens } from "./types";
 import { basicAuth, getJson, getSignalForTimeout, makeFormBody, recastAbortError } from "./utils";
 import { getConfig } from "./config";
-import { list } from "./list";
-import { upsert } from "./upsert";
-import { read } from "./read";
-import { report } from "./report";
+import { list, ListArgs, ListResponse } from "./list";
+import { upsert, UpsertArgs, UpsertResponse } from "./upsert";
+import { read, ReadArgs, ReadResponse } from "./read";
+import { report, ReportArgs, ReportResponse } from "./report";
 
+
+export type { Tokens, QBOQueryableEntityType, QBOReportEntityType, GetQBOQueryableEntityType, GetEntitySpecificReport } from "./types";
 export type { ReportArgs, ReportResponse } from "./report";
 export type { ReadArgs, ReadResponse } from "./read";
 export type { UpsertArgs, UpsertResponse } from "./upsert";
 export type { ListArgs, ListResponse } from "./list";
-export type { Tokens };
 
 export interface ClientArgs {
   client_id: string,
@@ -30,13 +31,32 @@ export interface QboClient {
   get tokens(): Tokens,
 
   /** @desc Read one QBO entity of a given type by id */
-  read: ReturnType<typeof read>,
+  read<T extends QBOQueryableEntityType>({
+    entity,
+    entity_id,
+    fetchFn
+  }: ReadArgs<T>): Promise<ReadResponse<T>>,
+
   /** @desc List QBO entities of a given type with optional query parameters */
-  list: ReturnType<typeof list>,
+  list<T extends QBOQueryableEntityType>({
+    entity,
+    opts,
+    fetchFn
+  }: ListArgs<T>): Promise<ListResponse<T>>,
+
   /** @desc Update if exists, otherwise insert one QBO entity of a given type */
-  upsert: ReturnType<typeof upsert>,
+  upsert<T extends QBOQueryableEntityType>({
+    entity,
+    record,
+    fetchFn
+  }: UpsertArgs<T>): Promise<UpsertResponse<T>>,
+
   /** @desc Query a QBO report of a given type with optional query parameters */
-  report: ReturnType<typeof report>
+  report<T extends QBOReportEntityType>({
+    entity,
+    opts,
+    fetchFn
+  }: ReportArgs<T>): Promise<ReportResponse<T>>
 }
 
 export const client = async ({

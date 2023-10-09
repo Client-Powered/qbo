@@ -84,6 +84,7 @@ export type QboQueryableEntityToType = {
   employee: EmployeeQboData
 };
 
+/** Gets the entity object type from the entity name  */
 export type GetQBOQueryableEntityType<T extends QBOQueryableEntityType> =
   T extends keyof QboQueryableEntityToType ? QboQueryableEntityToType[T] : {
     Id: string,
@@ -134,7 +135,8 @@ export type QBOReportEntityType = (typeof _reportEntityNames)[number];
 
 export const qboReportEntities: QBOReportEntityType[] = _reportEntityNames as any;
 
-export type EntitySpecificReport<T extends QBOReportEntityType> = Omit<NameReportTableTransactionsListColumnQboData, "Header"> & {
+/** Gets the report object type from the entity name  */
+export type GetEntitySpecificReport<T extends QBOReportEntityType> = Omit<NameReportTableTransactionsListColumnQboData, "Header"> & {
   Header: Omit<NameReportTableTransactionsListColumnQboData["Header"], "ReportName"> & {
     ReportName: SnakeToCamelCase<T>
   }
