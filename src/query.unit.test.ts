@@ -259,6 +259,7 @@ describe("fetchQuery", () => {
 
     const headers = { "Content-Type": "application/json" };
 
+    // @ts-ignore
     const fetchFn: any = jest.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = input.toString();
       expect(url).toBe("https://localhost.com/apirealm_id/query?limit=10&offset=0&query=select%20*%20from%20Employee%20where%20BirthDate%20%3D%20%272022-03-10%27&minorversion=65");
@@ -295,6 +296,7 @@ describe("fetchQuery", () => {
 
     const headers = { "Content-Type": "application/json" };
 
+    // @ts-ignore
     const fetchFn: any = jest.fn((input: RequestInfo | URL, init?: RequestInit) => {
       const url = input.toString();
       expect(url).toBe("https://localhost.com/apirealm_id/query?limit=10&offset=0&query=select%20*%20from%20Employee%20where%20BirthDate%20%3D%20%272022-03-10%27&minorversion=65");

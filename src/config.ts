@@ -12,16 +12,18 @@ interface GetConfigArgs {
   access_token: string,
   refresh_token: string,
   realm_id: string,
-  max_timeout_in_ms?: number
+  max_timeout_in_ms?: number,
+  fetchFn: typeof fetch
 }
 export const getConfig = async ({
   use_sandbox,
   access_token,
   refresh_token,
   realm_id,
-  max_timeout_in_ms
+  max_timeout_in_ms,
+  fetchFn
 }: GetConfigArgs): Promise<Config> => ({
-  ...await discovery({ use_sandbox: use_sandbox }),
+  ...await discovery({ fetchFn, use_sandbox: use_sandbox }),
   REFRESH_TOKEN: refresh_token as string | null,
   ACCESS_TOKEN: access_token as string | null,
   REALM_ID: realm_id as string | null,

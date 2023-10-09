@@ -143,12 +143,15 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
 };
 
 interface ListInit {
+  initFetchFn: typeof fetch,
   config: Config
 }
 
 export interface ListArgs<T extends QBOQueryableEntityType> {
   entity: T,
-  opts?: QueryOptsBase<T>
+  opts?: QueryOptsBase<T>,
+  /** @desc A custom fetch function to use for this list request. This will override any fetchFn passed to the client. */
+  fetchFn?: typeof fetch
 }
 
 export type ListResponse<T extends QBOQueryableEntityType> = {
@@ -162,14 +165,17 @@ export type ListResponse<T extends QBOQueryableEntityType> = {
 };
 
 export const list = ({
+  initFetchFn = fetch,
   config
 }: ListInit) => async <T extends QBOQueryableEntityType>({
   entity,
-  opts
+  opts,
+  fetchFn: _fetchFn
 }: ListArgs<T>): Promise<GetQBOQueryableEntityType<T>[]> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
+  const fetchFn = _fetchFn ?? initFetchFn;
 
   const Entity = snakeCaseToCamelCase(entity);
 
@@ -188,7 +194,7 @@ export const list = ({
       "Authorization": tokenAuth({ config }),
       "Accept": "application/json"
     },
-    fetchFn: fetch
+    fetchFn: fetchFn
   });
 
   return data?.QueryResponse[Entity] ?? [];
