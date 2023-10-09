@@ -28,6 +28,7 @@ export interface ReadArgs<T extends QBOQueryableEntityType> {
 }
 
 export type ReadResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>;
+
 export const read = ({
   config,
   initFetchFn = fetch

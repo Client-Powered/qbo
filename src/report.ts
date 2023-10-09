@@ -49,6 +49,7 @@ export interface ReportArgs<T extends QBOReportEntityType> {
 }
 
 export type ReportResponse<T extends QBOReportEntityType> = GetEntitySpecificReport<T>;
+
 export const report = ({
   config,
   initFetchFn = fetch

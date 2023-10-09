@@ -16,7 +16,6 @@ import {
 import { Config } from "./lib/config";
 import { v4 as uuid } from "uuid";
 
-
 export const combine = <T extends QBOQueryableEntityType>(
   Entity: SnakeToCamelCase<T>,
   first: FetchListResponse<T>,
@@ -165,6 +164,7 @@ export interface ListArgs<T extends QBOQueryableEntityType> {
 }
 
 export type ListResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>[];
+
 export const list = ({
   initFetchFn = fetch,
   config

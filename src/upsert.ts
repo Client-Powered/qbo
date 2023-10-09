@@ -28,6 +28,7 @@ export interface UpsertArgs<T extends QBOQueryableEntityType> {
 }
 
 export type UpsertResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>;
+
 export const upsert = ({
   initFetchFn = fetch,
   config
