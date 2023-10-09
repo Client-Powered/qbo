@@ -1,6 +1,6 @@
 import { combine, fetchListQuery, optsToListQueryCondition, QueryOptsBase, QueryOptsInternal } from "./list";
-import { QBOQueryableEntityType, SnakeToCamelCase } from "./types";
-import { Config } from "./config";
+import { QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
+import { Config } from "./lib/config";
 
 
 describe("combine", () => {
