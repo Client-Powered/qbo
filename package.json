@@ -1,15 +1,15 @@
 {
   "name": "qbo",
-  "version": "0.1.15",
+  "version": "0.1.21",
   "description": "A client for interfacing with the QBO API.",
   "repository": "https://github.com/Client-Powered/qbo",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "start": "node --require ts-node/register --require @babel/register src/_local.ts",
     "test": "jest",
-    "prepublish": "rm -rf lib && npx tsc"
+    "setup-publish": "rm -rf dist && npx tsc"
   },
   "author": "Charles Anderson",
   "license": "ISC",

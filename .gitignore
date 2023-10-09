@@ -2,9 +2,9 @@
 /node_modules/
 .env
 tokens.json
-lib
+dist
 coverage
 reports
-/lib/
+/dist/
 src/_local.ts
 !src/lib
