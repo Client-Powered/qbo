@@ -1,6 +1,6 @@
 import { AccountListQuery } from "./account-list";
 import { TransactionListQuery } from "./transactions-list";
-import { QBOReportEntityType } from "../types";
+import { QBOReportEntityType } from "../lib/types";
 import { UnknownReportQuery } from "./unknown";
 
 export type DateMacro =

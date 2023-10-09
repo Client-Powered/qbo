@@ -1,9 +1,9 @@
-import { CompanyInfoQboData } from "./entity/company-info";
-import { CustomerQboData } from "./entity/customer";
-import { CustomerTypeQboData } from "./entity/customer-type";
-import { EmployeeQboData } from "./entity/employee";
-import { NameReportTableTransactionsListColumnQboData } from "./entity/report";
-import { AccountQboData } from "./entity/account";
+import { CompanyInfoQboData } from "../entity/company-info";
+import { CustomerQboData } from "../entity/customer";
+import { CustomerTypeQboData } from "../entity/customer-type";
+import { EmployeeQboData } from "../entity/employee";
+import { NameReportTableTransactionsListColumnQboData } from "../entity/report";
+import { AccountQboData } from "../entity/account";
 
 export interface Tokens {
   access_token: string,

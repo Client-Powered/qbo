@@ -3,7 +3,7 @@ import {
   GetQBOQueryablePropsForEntityType,
   QBOQueryableEntityType,
   QueryOperatorType, SnakeToCamelCase
-} from "./types";
+} from "./lib/types";
 import {
   getJson,
   getSignalForTimeout,
@@ -12,8 +12,8 @@ import {
   quote,
   recastAbortError, snakeCaseToCamelCase,
   tokenAuth
-} from "./utils";
-import { Config } from "./config";
+} from "./lib/utils";
+import { Config } from "./lib/config";
 import { v4 as uuid } from "uuid";
 
 

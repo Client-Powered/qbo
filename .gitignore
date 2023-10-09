@@ -7,3 +7,4 @@ coverage
 reports
 /lib/
 src/_local.ts
+!src/lib
