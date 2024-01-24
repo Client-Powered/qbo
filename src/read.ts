@@ -5,10 +5,11 @@ import {
   getSignalForTimeout,
   isQueryableEntity,
   makeRequestURL,
-  recastAbortError, snakeCaseToCamelCase,
+  handleQBOError, ensureQboError, snakeCaseToCamelCase,
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
+import { InvalidQueryArgsError, QBOError } from "./lib/errors/error-classes";
 
 export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
@@ -36,21 +37,28 @@ export const read = ({
   entity,
   entity_id,
   fetchFn: _fetchFn
-}: ReadArgs<T>): Promise<ReadResponse<T>> => {
+}: ReadArgs<T>): Promise<Result<ReadResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    throw new Error(`Invalid entity: ${entity}`);
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`));
   } else if (Number.isNaN(Number(entity_id))) {
-    throw new Error(`Invalid entity id: ${entity_id}, should be a string of numbers`);
+    return err(new InvalidQueryArgsError(`Invalid entity id: ${entity_id}, should be a string of numbers`));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
   const Entity = snakeCaseToCamelCase(entity);
-  const url = makeRequestURL({
+  const {
+    error: makeRequestError, data: url
+  } = makeRequestURL({
     config,
     path: `/${Entity.toLowerCase()}/${entity_id}`
   });
+  if (makeRequestError) {
+    return err(new InvalidQueryArgsError(makeRequestError.message));
+  }
 
-  const data = await fetchFn(url, {
+  const {
+    error, data
+  } = await fetchFn(url, {
     method: "GET",
     headers: {
       "User-Agent": "qbo-api",
@@ -62,7 +70,9 @@ export const read = ({
     signal: getSignalForTimeout({ config })
   })
     .then(getJson<QueryResponse<T>>())
-    .catch(recastAbortError);
-
-  return data[Entity];
+    .catch(handleQBOError);
+  if (error) {
+    return err(error);
+  }
+  return ok(data[Entity]);
 };

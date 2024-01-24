@@ -34,7 +34,6 @@
   },
   "plugins": [
     "eslint-plugin-no-null",
-    "eslint-plugin-jsdoc",
     "@typescript-eslint"
   ],
   "rules": {

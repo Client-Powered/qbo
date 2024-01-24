@@ -6,6 +6,9 @@ import {
 } from "./types";
 import { Config } from "./config";
 import { isValid, parseISO } from "date-fns";
+import { getErrorFromResponse } from "./errors";
+import { QBOError, RequestTimeoutError, UnknownQBOError } from "./errors/error-classes";
+import { withResult } from "ts-error-as-value";
 
 
 export const makeFormBody = (obj: object): URLSearchParams => {
@@ -64,7 +67,7 @@ interface MakeRequestURL<T extends object>{
   config: Config,
   query_params?: T
 }
-export const makeRequestURL = <T extends object>({
+export const makeRequestURL = withResult(<T extends object>({
   path,
   config,
   query_params
@@ -72,7 +75,7 @@ export const makeRequestURL = <T extends object>({
   new URL(`${config.V3_ENDPOINT_BASE_URL}${config.REALM_ID}${path}${makeQueryParams({
     ...(query_params ?? {}),
     minorversion: 65
-  })}`);
+  })}`));
 
 export const title = <T extends string>(str: T): Capitalize<T> =>
   `${str.charAt(0).toUpperCase()}${str.slice(1)}` as Capitalize<T>;
@@ -97,24 +100,27 @@ export const getSignalForTimeout = ({
   return signal;
 };
 
-export const recastAbortError = (e: any) => {
-  if (e?.name === "AbortError") {
-    throw new Error("Max timeout exceeded when waiting for response from QBO");
+export const ensureQboError = (e: any): QBOError => {
+  if (!(e instanceof QBOError)) {
+    return new UnknownQBOError(e.message);
   }
-  throw e;
+  return e;
 };
 
-export const getJson = <T>() => async (res: Response): Promise<T> => {
-  if (!res.ok) {
-    let jsonErrorString: string;
-    try {
-      jsonErrorString = `\n${JSON.stringify(await res.json())}`;
-    } catch (e) {
-      jsonErrorString = "";
-    }
-    throw new Error(`Error in QBO request to url ${res.url}${jsonErrorString}`);
+export const handleQBOError = (e: any): Result<never, QBOError> => {
+  if (e?.name === "AbortError") {
+    return err(new RequestTimeoutError(
+      "Max timeout exceeded when waiting for response from QBO"
+    ));
   }
-  return res.json();
+  return err(ensureQboError(e));
+};
+
+export const getJson = <T>() => async (res: Response): Promise<Result<T, QBOError>> => {
+  if (!res.ok) {
+    return err(await getErrorFromResponse(res));
+  }
+  return ok(await res.json());
 };
 
 export const isISODateString = (s: any): s is string => {

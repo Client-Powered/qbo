@@ -10,11 +10,13 @@ import {
   isQueryableEntity,
   makeRequestURL,
   quote,
-  recastAbortError, snakeCaseToCamelCase,
+  handleQBOError, snakeCaseToCamelCase,
   tokenAuth
 } from "./lib/utils";
 import { Config } from "./lib/config";
 import { v4 as uuid } from "uuid";
+import { InvalidQueryArgsError, QBOError } from "./lib/errors/error-classes";
+import { withResult } from "ts-error-as-value";
 
 export const combine = <T extends QBOQueryableEntityType>(
   Entity: SnakeToCamelCase<T>,
@@ -113,8 +115,10 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   Entity,
   headers,
   fetchFn
-}: FetchListQuery<T>): Promise<FetchListResponse<T>> => {
-  const url = makeRequestURL({
+}: FetchListQuery<T>): Promise<Result<FetchListResponse<T>>> => {
+  const {
+    error: makeRequestError, data: url
+  } = makeRequestURL({
     config,
     path: "/query",
     query_params: {
@@ -123,21 +127,29 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
       query: `select * from ${Entity} ${optsToListQueryCondition(opts)}`.trim()
     }
   });
+  if (makeRequestError) {
+    throw makeRequestError;
+  }
 
-  const data = await fetchFn(url, {
+  const {
+    error, data
+  } = await fetchFn(url, {
     headers: headers as any,
     signal: getSignalForTimeout({ config })
   })
     .then(getJson<FetchListResponse<T>>())
-    .catch(recastAbortError);
+    .catch(handleQBOError);
+  if (error) {
+    return err(error);
+  }
 
   if (!opts.fetch_all || data.QueryResponse[Entity]?.length !== opts.limit) {
-    return data;
+    return ok(data);
   } else {
-    return combine(
+    return ok(combine(
       Entity,
       data,
-      await fetchListQuery({
+      (await fetchListQuery({
         config,
         opts: {
           ...opts,
@@ -146,8 +158,8 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
         Entity,
         headers,
         fetchFn
-      })
-    );
+      })).successOrThrow()
+    ));
   }
 };
 
@@ -172,15 +184,17 @@ export const list = ({
   entity,
   opts,
   fetchFn: _fetchFn
-}: ListArgs<T>): Promise<ListResponse<T>> => {
+}: ListArgs<T>): Promise<Result<ListResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    throw new Error(`Invalid entity: ${entity}`);
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
   const Entity = snakeCaseToCamelCase(entity);
 
-  const data = await fetchListQuery<T>({
+  const {
+    error, data
+  } = await fetchListQuery<T>({
     config,
     opts: {
       ...(opts ?? {}),
@@ -197,7 +211,10 @@ export const list = ({
     },
     fetchFn: fetchFn
   });
+  if (error) {
+    return err(error);
+  }
 
-  return data?.QueryResponse[Entity] ?? [];
+  return ok(data?.QueryResponse[Entity] ?? []);
 };
 

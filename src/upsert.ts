@@ -5,7 +5,7 @@ import {
   getSignalForTimeout,
   isQueryableEntity,
   makeRequestURL,
-  recastAbortError, snakeCaseToCamelCase,
+  handleQBOError, snakeCaseToCamelCase,
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
@@ -36,19 +36,26 @@ export const upsert = ({
   entity,
   record,
   fetchFn: _fetchFn
-}: UpsertArgs<T>): Promise<UpsertResponse<T>> => {
+}: UpsertArgs<T>): Promise<Result<UpsertResponse<T>>> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
   const Entity = snakeCaseToCamelCase(entity);
-  const url = makeRequestURL({
+  const {
+    error: makeRequestError, data: url
+  } = makeRequestURL({
     config,
     path: `/${Entity.toLowerCase()}`
   });
+  if (makeRequestError) {
+    return err(makeRequestError);
+  }
 
-  const data = await fetchFn(url, {
+  const {
+    error, data
+  } = await fetchFn(url, {
     method: "POST",
     headers: {
       "User-Agent": "qbo-api",
@@ -61,7 +68,9 @@ export const upsert = ({
     signal: getSignalForTimeout({ config })
   })
     .then(getJson<QueryResponse<T>>())
-    .catch(recastAbortError);
-
-  return data[Entity];
+    .catch(handleQBOError);
+  if (error) {
+    return err(error);
+  }
+  return ok(data[Entity]);
 };

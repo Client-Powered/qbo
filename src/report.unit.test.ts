@@ -1,6 +1,7 @@
 import { ReportQuery } from "./report-query";
 import { createReportOpts } from "./report";
 import { format } from "date-fns";
+import "ts-error-as-value/lib/globals";
 
 
 describe("createReportOpts", () => {

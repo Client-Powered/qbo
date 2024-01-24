@@ -1,3 +1,5 @@
+import { getJson, handleQBOError } from "./utils";
+import { GetEntitySpecificReport } from "./types";
 
 export const DISCOVERY_URL_SANDBOX = "https://developer.intuit.com/.well-known/openid_sandbox_configuration/";
 
@@ -26,31 +28,33 @@ interface DiscoveryArgs {
 export const discovery = async ({
   use_sandbox,
   fetchFn
-}: DiscoveryArgs): Promise<DiscoveryConfig> => {
+}: DiscoveryArgs): Promise<Result<DiscoveryConfig>> => {
   const discoveryURL = !use_sandbox
     ? DISCOVERY_URL_LIVE
     : DISCOVERY_URL_SANDBOX;
-  const discoveryResponse = await fetchFn(discoveryURL, {
+  const {
+    error, data: discoveryResponse
+  } = await fetchFn(discoveryURL, {
     headers: {
       Accept: "application/json"
     }
-  }).then((res): Promise<DiscoveryResponse> => {
-    if (!res.ok) {
-      throw new Error(`Request failed with status code ${res.status}`);
-    }
-    return res.json();
-  });
+  })
+    .then(getJson<DiscoveryResponse>())
+    .catch(handleQBOError);
+  if (error) {
+    return err(error);
+  }
   const v3Endpoint = !use_sandbox
     ? "https://quickbooks.api.intuit.com/v3/company/"
     : "https://sandbox-quickbooks.api.intuit.com/v3/company/";
-  return {
+  return ok({
     APP_CENTER_BASE: "https://appcenter.intuit.com",
     V3_ENDPOINT_BASE_URL: v3Endpoint,
     TOKEN_URL: discoveryResponse.token_endpoint,
     REVOKE_URL: discoveryResponse.revocation_endpoint,
     USER_INFO_URL: discoveryResponse.userinfo_endpoint,
     AUTHORIZATION_URL: discoveryResponse.authorization_endpoint
-  };
+  });
 };
 
 

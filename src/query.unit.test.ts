@@ -1,7 +1,7 @@
 import { combine, fetchListQuery, optsToListQueryCondition, QueryOptsBase, QueryOptsInternal } from "./list";
 import { QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
 import { Config } from "./lib/config";
-
+import "ts-error-as-value/lib/globals";
 
 describe("combine", () => {
   it("should correctly combine two QueryResponses", () => {
@@ -313,7 +313,7 @@ describe("fetchQuery", () => {
         Entity: "Employee",
         headers,
         fetchFn
-      })
+      }).then(result => result.successOrThrow())
     )).rejects.toThrowError();
 
     expect(fetchFn).toHaveBeenCalled();
@@ -342,14 +342,17 @@ describe("fetchQuery", () => {
       json: () => Promise.resolve(expectedData)
     }));
 
-    const result = await fetchListQuery({
+    const {
+      data: result, error
+    } = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
       headers,
       fetchFn
     });
-
+    
+    expect(error).toBeNull();
     expect(result).toEqual(expectedData);
   });
 
@@ -375,7 +378,9 @@ describe("fetchQuery", () => {
         json: () => Promise.resolve({ QueryResponse: { Employee: [] } })
       }));
 
-    const result = await fetchListQuery({
+    const {
+      data: result, error
+    } = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
@@ -383,6 +388,7 @@ describe("fetchQuery", () => {
       fetchFn
     });
 
+    expect(error).toBeNull();
     expect(result).toEqual(expectedData);
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
@@ -431,7 +437,9 @@ describe("fetchQuery", () => {
         json: () => Promise.resolve({ QueryResponse: { Employee: [{ Id: "3" }] } })
       }));
 
-    const result = await fetchListQuery({
+    const {
+      data: result, error
+    } = await fetchListQuery({
       config,
       opts,
       Entity: "Employee",
@@ -439,6 +447,7 @@ describe("fetchQuery", () => {
       fetchFn
     });
 
+    expect(error).toBeNull();
     expect(result).toEqual({ QueryResponse: { Employee: [{ Id: "1" }, { Id: "2" }, { Id: "3" }] } });
   });
 });
