@@ -5,13 +5,14 @@ import {
   getSignalForTimeout, isISODateString,
   isReportEntity,
   makeRequestURL,
-  recastAbortError,
+  handleQBOError,
   snakeCaseToCamelCase,
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
 import { isCommasOption, ReportQuery } from "./report-query";
 import { format, parseISO } from "date-fns";
+import { QBOError } from "./lib/errors/error-classes";
 
 interface CreateReportOpts<T extends QBOReportEntityType> {
   opts?: ReportQuery<T>
@@ -57,7 +58,7 @@ export const report = ({
   entity,
   opts,
   fetchFn: _fetchFn
-}: ReportArgs<T>): Promise<ReportResponse<T>> => {
+}: ReportArgs<T>): Promise<Result<ReportResponse<T>, QBOError>> => {
   if (!isReportEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
@@ -65,11 +66,16 @@ export const report = ({
 
   const queryParams = createReportOpts<T>({ opts });
 
-  const url = makeRequestURL({
+  const {
+    error: makeRequestError, data: url
+  } = makeRequestURL({
     config,
     path: `/reports/${snakeCaseToCamelCase(entity)}`,
     query_params: queryParams
   });
+  if (makeRequestError) {
+    return err(new Error(makeRequestError.message));
+  }
 
   return fetchFn(url, {
     method: "GET",
@@ -83,5 +89,5 @@ export const report = ({
     signal: getSignalForTimeout({ config })
   })
     .then(getJson<GetEntitySpecificReport<T>>())
-    .catch(recastAbortError);
+    .catch(handleQBOError);
 };
