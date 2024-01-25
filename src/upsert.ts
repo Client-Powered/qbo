@@ -9,6 +9,7 @@ import {
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
+import { QBOError } from "./lib/errors/error-classes";
 
 export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
@@ -36,7 +37,7 @@ export const upsert = ({
   entity,
   record,
   fetchFn: _fetchFn
-}: UpsertArgs<T>): Promise<Result<UpsertResponse<T>>> => {
+}: UpsertArgs<T>): Promise<Result<UpsertResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
     throw new Error(`Invalid entity: ${entity}`);
   }
