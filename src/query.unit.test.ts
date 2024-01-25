@@ -335,7 +335,7 @@ describe("fetchQuery", () => {
 
     const headers = { "Content-Type": "application/json" };
 
-    const expectedData = { QueryResponse: { Employee: [] } };
+    const expectedData = { QueryResponse: { Employee: [] }, intuitTid: null };
 
     const fetchFn: any = jest.fn(() => Promise.resolve({
       ok: true,
@@ -351,7 +351,7 @@ describe("fetchQuery", () => {
       headers,
       fetchFn
     });
-    
+
     expect(error).toBeNull();
     expect(result).toEqual(expectedData);
   });
@@ -387,7 +387,7 @@ describe("fetchQuery", () => {
       headers,
       fetchFn
     });
-
+    console.log();
     expect(error).toBeNull();
     expect(result).toEqual(expectedData);
     expect(fetchFn).toHaveBeenCalledTimes(2);
