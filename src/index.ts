@@ -6,6 +6,7 @@ import { upsert, UpsertArgs, UpsertResponse } from "./upsert";
 import { read, ReadArgs, ReadResponse } from "./read";
 import { report, ReportArgs, ReportResponse } from "./report";
 import "ts-error-as-value/lib/globals";
+import { QBOError } from "./lib/errors/error-classes";
 
 export * as QBOError from "./lib/errors/error-classes";
 export type { Tokens, QBOQueryableEntityType, QBOReportEntityType, GetQBOQueryableEntityType, GetEntitySpecificReport } from "./lib/types";
@@ -27,8 +28,8 @@ export interface ClientArgs {
 }
 
 export interface QboClient {
-  refreshAccessToken(): Promise<Result>,
-  revokeAccess(tokenType: "REFRESH" | "ACCESS"): Promise<Result>,
+  refreshAccessToken(): Promise<Result<never, QBOError>>,
+  revokeAccess(tokenType: "REFRESH" | "ACCESS"): Promise<Result<never, QBOError>>,
   get tokens(): Tokens,
 
   /** @desc Read one QBO entity of a given type by id */
@@ -36,28 +37,28 @@ export interface QboClient {
     entity,
     entity_id,
     fetchFn
-  }: ReadArgs<T>): Promise<Result<ReadResponse<T>>>,
+  }: ReadArgs<T>): Promise<Result<ReadResponse<T>, QBOError>>,
 
   /** @desc List QBO entities of a given type with optional query parameters */
   list<T extends QBOQueryableEntityType>({
     entity,
     opts,
     fetchFn
-  }: ListArgs<T>): Promise<Result<ListResponse<T>>>,
+  }: ListArgs<T>): Promise<Result<ListResponse<T>, QBOError>>,
 
   /** @desc Update if exists, otherwise insert one QBO entity of a given type */
   upsert<T extends QBOQueryableEntityType>({
     entity,
     record,
     fetchFn
-  }: UpsertArgs<T>): Promise<Result<UpsertResponse<T>>>,
+  }: UpsertArgs<T>): Promise<Result<UpsertResponse<T>, QBOError>>,
 
   /** @desc Query a QBO report of a given type with optional query parameters */
   report<T extends QBOReportEntityType>({
     entity,
     opts,
     fetchFn
-  }: ReportArgs<T>): Promise<Result<ReportResponse<T>>>
+  }: ReportArgs<T>): Promise<Result<ReportResponse<T>, QBOError>>
 }
 
 export const client = async ({
