@@ -101,7 +101,7 @@ interface FetchListQuery<T extends QBOQueryableEntityType> {
 
 
 export type FetchListResponse<T extends QBOQueryableEntityType> = {
-  time: string,
+  time: number,
   QueryResponse: {
     [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>[]
   } & {
@@ -178,7 +178,7 @@ export interface ListArgs<T extends QBOQueryableEntityType> {
 
 export type ListResponse<T extends QBOQueryableEntityType> = {
   entities: GetQBOQueryableEntityType<T>[],
-  time: string,
+  time: number,
   intuitTid: string | null
 };
 

@@ -14,7 +14,7 @@ import { InvalidQueryArgsError, QBOError } from "./lib/errors/error-classes";
 export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
 } & {
-  time: string,
+  time: number,
   intuitTid: string | null
 };
 
@@ -31,7 +31,7 @@ export interface ReadArgs<T extends QBOQueryableEntityType> {
 
 export type ReadResponse<T extends QBOQueryableEntityType> = {
   entity: GetQBOQueryableEntityType<T>,
-  time: string,
+  time: number,
   intuitTid: string | null
 };
 

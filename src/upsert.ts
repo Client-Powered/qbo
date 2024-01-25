@@ -14,7 +14,7 @@ import { QBOError } from "./lib/errors/error-classes";
 export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
 } & {
-  time: string,
+  time: number,
   intuitTid: string | null
 };
 
@@ -31,7 +31,7 @@ export interface UpsertArgs<T extends QBOQueryableEntityType> {
 
 export type UpsertResponse<T extends QBOQueryableEntityType> = {
   entity: GetQBOQueryableEntityType<T>,
-  time: string,
+  time: number,
   intuitTid: string | null
 };
 
