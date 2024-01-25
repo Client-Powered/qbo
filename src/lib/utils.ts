@@ -102,7 +102,7 @@ export const getSignalForTimeout = ({
 
 export const ensureQboError = (e: any): QBOError => {
   if (!(e instanceof QBOError)) {
-    return new UnknownQBOError(e.message);
+    return new UnknownQBOError(e.message, null);
   }
   return e;
 };
@@ -110,19 +110,21 @@ export const ensureQboError = (e: any): QBOError => {
 export const handleQBOError = (e: any): Result<never, QBOError> => {
   if (e?.name === "AbortError") {
     return err(new RequestTimeoutError(
-      "Max timeout exceeded when waiting for response from QBO"
+      "Max timeout exceeded when waiting for response from QBO",
+      null
     ));
   }
   return err(ensureQboError(e));
 };
 
 export const getJson = <T extends { intuitTid: string | null }>() => async (res: Response): Promise<Result<T, QBOError>> => {
+  const intuitTid = res?.headers?.get("intuit_tid") ?? null;
   if (!res.ok) {
-    return err(await getErrorFromResponse(res));
+    return err(await getErrorFromResponse(res, intuitTid));
   }
   return ok({
     ...await res.json(),
-    intuitTid: res.headers.get("intuit_tid") ?? null
+    intuitTid
   });
 };
 
