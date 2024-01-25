@@ -22,7 +22,7 @@ export type QBOApiErrorResponse = {
     }[],
     type: string
   },
-  time: string
+  time: number
 };
 export const getErrorFromResponse = async (
   response: Response,
