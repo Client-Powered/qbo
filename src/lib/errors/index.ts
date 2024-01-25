@@ -26,7 +26,7 @@ export type QBOApiErrorResponse = {
 };
 export const getErrorFromResponse = async (
   response: Response,
-  intuitTid: string | null
+  intuitTid: number | null
 ): Promise<QBOError> => {
   if (response.ok) {
     throw new Error(`Tried to get an error instance from response but there was no error (received status code ${response.status})`);

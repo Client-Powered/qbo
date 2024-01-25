@@ -108,7 +108,7 @@ export type FetchListResponse<T extends QBOQueryableEntityType> = {
     startPosition: number,
     maxResults: number
   },
-  intuitTid: string
+  intuitTid: number
 };
 export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   config,
@@ -179,7 +179,7 @@ export interface ListArgs<T extends QBOQueryableEntityType> {
 export type ListResponse<T extends QBOQueryableEntityType> = {
   entities: GetQBOQueryableEntityType<T>[],
   time: string,
-  intuitTid: string | null
+  intuitTid: number | null
 };
 
 export const list = ({

@@ -33,7 +33,7 @@ export interface RefreshTokenResponse {
   access_token:               string,
   token_type:                 string,
   expires_in:                 number,
-  intuitTid:                  string | null
+  intuitTid:                  number | null
 }
 
 const _qboEntities = [
@@ -141,7 +141,7 @@ export type GetEntitySpecificReport<T extends QBOReportEntityType> = Omit<NameRe
   Header: Omit<NameReportTableTransactionsListColumnQboData["Header"], "ReportName"> & {
     ReportName: SnakeToCamelCase<T>
   },
-  intuitTid: string | null
+  intuitTid: number | null
 };
 
 

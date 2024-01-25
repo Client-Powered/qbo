@@ -1,6 +1,6 @@
 {
   "name": "qbo",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "description": "A client for interfacing with the QBO API.",
   "repository": "https://github.com/Client-Powered/qbo",
   "main": "dist/index.js",
