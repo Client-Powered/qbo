@@ -15,7 +15,7 @@ export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
 } & {
   time: string,
-  intuitTid: number | null
+  intuitTid: string | null
 };
 
 interface UpsertInit {
@@ -32,7 +32,7 @@ export interface UpsertArgs<T extends QBOQueryableEntityType> {
 export type UpsertResponse<T extends QBOQueryableEntityType> = {
   entity: GetQBOQueryableEntityType<T>,
   time: string,
-  intuitTid: number | null
+  intuitTid: string | null
 };
 
 export const upsert = ({

@@ -15,7 +15,7 @@ export type QueryResponse<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
 } & {
   time: string,
-  intuitTid: number | null
+  intuitTid: string | null
 };
 
 interface ReadInit {
@@ -32,7 +32,7 @@ export interface ReadArgs<T extends QBOQueryableEntityType> {
 export type ReadResponse<T extends QBOQueryableEntityType> = {
   entity: GetQBOQueryableEntityType<T>,
   time: string,
-  intuitTid: number | null
+  intuitTid: string | null
 };
 
 export const read = ({

@@ -117,11 +117,8 @@ export const handleQBOError = (e: any): Result<never, QBOError> => {
   return err(ensureQboError(e));
 };
 
-export const getJson = <T extends { intuitTid: number | null }>() => async (res: Response): Promise<Result<T, QBOError>> => {
-  const maybeIntuitTid = res?.headers?.get("intuit_tid") ;
-  const intuitTid = maybeIntuitTid
-    ? Number(maybeIntuitTid)
-    : null;
+export const getJson = <T extends { intuitTid: string | null }>() => async (res: Response): Promise<Result<T, QBOError>> => {
+  const intuitTid = res?.headers?.get("intuit_tid") ?? null;
   if (!res.ok) {
     return err(await getErrorFromResponse(res, intuitTid));
   }
