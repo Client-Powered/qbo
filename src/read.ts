@@ -29,7 +29,11 @@ export interface ReadArgs<T extends QBOQueryableEntityType> {
   fetchFn?: typeof fetch
 }
 
-export type ReadResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>;
+export type ReadResponse<T extends QBOQueryableEntityType> = {
+  entity: GetQBOQueryableEntityType<T>,
+  time: string,
+  intuitTid: string | null
+};
 
 export const read = ({
   config,
@@ -75,5 +79,9 @@ export const read = ({
   if (error) {
     return err(error);
   }
-  return ok(data[Entity]);
+  return ok({
+    entity: data[Entity],
+    time: data.time,
+    intuitTid: data.intuitTid
+  });
 };

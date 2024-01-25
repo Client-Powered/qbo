@@ -176,7 +176,11 @@ export interface ListArgs<T extends QBOQueryableEntityType> {
   fetchFn?: typeof fetch
 }
 
-export type ListResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>[];
+export type ListResponse<T extends QBOQueryableEntityType> = {
+  entities: GetQBOQueryableEntityType<T>[],
+  time: string,
+  intuitTid: string | null
+};
 
 export const list = ({
   initFetchFn = fetch,
@@ -216,6 +220,10 @@ export const list = ({
     return err(error);
   }
 
-  return ok(data?.QueryResponse[Entity] ?? []);
+  return ok({
+    entities: data?.QueryResponse[Entity] ?? [],
+    time: data.time,
+    intuitTid: data.intuitTid
+  });
 };
 
