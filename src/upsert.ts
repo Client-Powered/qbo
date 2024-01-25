@@ -29,7 +29,11 @@ export interface UpsertArgs<T extends QBOQueryableEntityType> {
   fetchFn?: typeof fetch
 }
 
-export type UpsertResponse<T extends QBOQueryableEntityType> = GetQBOQueryableEntityType<T>;
+export type UpsertResponse<T extends QBOQueryableEntityType> = {
+  entity: GetQBOQueryableEntityType<T>,
+  time: string,
+  intuitTid: string | null
+};
 
 export const upsert = ({
   initFetchFn = fetch,
@@ -74,5 +78,9 @@ export const upsert = ({
   if (error) {
     return err(error);
   }
-  return ok(data[Entity]);
+  return ok({
+    entity: data[Entity],
+    time: data.time,
+    intuitTid: data.intuitTid
+  });
 };
