@@ -9,7 +9,8 @@ interface DiscoveryResponse {
   authorization_endpoint: string,
   token_endpoint: string,
   userinfo_endpoint: string,
-  revocation_endpoint: string
+  revocation_endpoint: string,
+  intuitTid: string | null
 }
 
 export interface DiscoveryConfig {

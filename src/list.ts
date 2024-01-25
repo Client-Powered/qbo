@@ -107,7 +107,8 @@ export type FetchListResponse<T extends QBOQueryableEntityType> = {
   } & {
     startPosition: number,
     maxResults: number
-  }
+  },
+  intuitTid: string
 };
 export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   config,

@@ -116,11 +116,14 @@ export const handleQBOError = (e: any): Result<never, QBOError> => {
   return err(ensureQboError(e));
 };
 
-export const getJson = <T>() => async (res: Response): Promise<Result<T, QBOError>> => {
+export const getJson = <T extends { intuitTid: string | null }>() => async (res: Response): Promise<Result<T, QBOError>> => {
   if (!res.ok) {
     return err(await getErrorFromResponse(res));
   }
-  return ok(await res.json());
+  return ok({
+    ...await res.json(),
+    intuitTid: res.headers.get("intuit_tid") ?? null
+  });
 };
 
 export const isISODateString = (s: any): s is string => {
