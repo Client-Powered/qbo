@@ -44,9 +44,9 @@ export const read = ({
   fetchFn: _fetchFn
 }: ReadArgs<T>): Promise<Result<ReadResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`));
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`, null));
   } else if (Number.isNaN(Number(entity_id))) {
-    return err(new InvalidQueryArgsError(`Invalid entity id: ${entity_id}, should be a string of numbers`));
+    return err(new InvalidQueryArgsError(`Invalid entity id: ${entity_id}, should be a string of numbers`, null));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
@@ -58,7 +58,7 @@ export const read = ({
     path: `/${Entity.toLowerCase()}/${entity_id}`
   });
   if (makeRequestError) {
-    return err(new InvalidQueryArgsError(makeRequestError.message));
+    return err(new InvalidQueryArgsError(makeRequestError.message, null));
   }
 
   const {

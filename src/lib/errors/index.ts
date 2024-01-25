@@ -25,7 +25,8 @@ export type QBOApiErrorResponse = {
   time: string
 };
 export const getErrorFromResponse = async (
-  response: Response
+  response: Response,
+  intuitTid: string | null
 ): Promise<QBOError> => {
   if (response.ok) {
     throw new Error(`Tried to get an error instance from response but there was no error (received status code ${response.status})`);
@@ -38,50 +39,50 @@ export const getErrorFromResponse = async (
 
   switch (response.status) {
     case 400:
-      return new BadRequestError(message, errorJsonBody);
+      return new BadRequestError(message, intuitTid, errorJsonBody);
     case 401:
-      return new UnauthorizedError(message, errorJsonBody);
+      return new UnauthorizedError(message, intuitTid, errorJsonBody);
     case 402:
-      return new PaymentRequiredError(message, errorJsonBody);
+      return new PaymentRequiredError(message, intuitTid, errorJsonBody);
     case 403:
-      return new ForbiddenError(message, errorJsonBody);
+      return new ForbiddenError(message, intuitTid, errorJsonBody);
     case 404:
-      return new NotFoundError(message, errorJsonBody);
+      return new NotFoundError(message, intuitTid, errorJsonBody);
     case 405:
-      return new MethodNotAllowedError(message, errorJsonBody);
+      return new MethodNotAllowedError(message, intuitTid, errorJsonBody);
     case 406:
-      return new NotAcceptableError(message, errorJsonBody);
+      return new NotAcceptableError(message, intuitTid, errorJsonBody);
     case 407:
-      return new ProxyAuthenticationRequiredError(message, errorJsonBody);
+      return new ProxyAuthenticationRequiredError(message, intuitTid, errorJsonBody);
     case 408:
-      return new RequestTimeoutError(message, errorJsonBody);
+      return new RequestTimeoutError(message, intuitTid, errorJsonBody);
     case 409:
-      return new ConflictError(message, errorJsonBody);
+      return new ConflictError(message, intuitTid, errorJsonBody);
     case 410:
-      return new GoneError(message, errorJsonBody);
+      return new GoneError(message, intuitTid, errorJsonBody);
     case 411:
-      return new LengthRequiredError(message, errorJsonBody);
+      return new LengthRequiredError(message, intuitTid, errorJsonBody);
     case 412:
-      return new PreconditionFailedError(message, errorJsonBody);
+      return new PreconditionFailedError(message, intuitTid, errorJsonBody);
     case 413:
-      return new PayloadTooLargeError(message, errorJsonBody);
+      return new PayloadTooLargeError(message, intuitTid, errorJsonBody);
     case 415:
-      return new UnsupportedMediaTypeError(message, errorJsonBody);
+      return new UnsupportedMediaTypeError(message, intuitTid, errorJsonBody);
     case 422:
-      return new UnprocessableEntityError(message, errorJsonBody);
+      return new UnprocessableEntityError(message, intuitTid, errorJsonBody);
     case 429:
-      return new TooManyRequestsError(message, errorJsonBody);
+      return new TooManyRequestsError(message, intuitTid, errorJsonBody);
     case 500:
-      return new InternalServerError(message, errorJsonBody);
+      return new InternalServerError(message, intuitTid, errorJsonBody);
     case 501:
-      return new NotImplementedError(message, errorJsonBody);
+      return new NotImplementedError(message, intuitTid, errorJsonBody);
     case 502:
-      return new BadGatewayError(message, errorJsonBody);
+      return new BadGatewayError(message, intuitTid, errorJsonBody);
     case 503:
-      return new ServiceUnavailableError(message, errorJsonBody);
+      return new ServiceUnavailableError(message, intuitTid, errorJsonBody);
     case 504:
-      return new GatewayTimeoutError(message, errorJsonBody);
+      return new GatewayTimeoutError(message, intuitTid, errorJsonBody);
     default:
-      return new UnknownQBOError(`Status of ${response.status} is not a known QBO error`, errorJsonBody);
+      return new UnknownQBOError(`Status of ${response.status} is not a known QBO error`, intuitTid, errorJsonBody);
   }
 };

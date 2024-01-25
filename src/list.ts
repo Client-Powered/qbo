@@ -191,7 +191,7 @@ export const list = ({
   fetchFn: _fetchFn
 }: ListArgs<T>): Promise<Result<ListResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`));
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`, null));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
