@@ -20,6 +20,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "date-fns": "^3.6.0",
     "ts-error-as-value": "^0.4.207",
     "uuid": "^9.0.0"
   },
