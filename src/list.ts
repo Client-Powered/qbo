@@ -28,7 +28,9 @@ export const combine = <T extends QBOQueryableEntityType>(
     maxResults: second.QueryResponse.maxResults,
     startPosition: second.QueryResponse.startPosition,
     [Entity]: [
+      // @ts-ignore
       ...first.QueryResponse[Entity],
+      // @ts-ignore
       ...second.QueryResponse[Entity]
     ]
   }
@@ -144,6 +146,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
     return err(error);
   }
 
+  // @ts-ignore
   if (!opts.fetch_all || data.QueryResponse[Entity]?.length !== opts.limit) {
     return ok(data);
   } else {
@@ -154,6 +157,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
         config,
         opts: {
           ...opts,
+          // @ts-ignore
           offset: opts.offset + data.QueryResponse[Entity]?.length
         },
         Entity,
@@ -221,6 +225,7 @@ export const list = ({
   }
 
   return ok({
+    // @ts-ignore
     entities: data?.QueryResponse[Entity] ?? [],
     time: data.time,
     intuitTid: data.intuitTid

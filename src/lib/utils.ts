@@ -24,8 +24,8 @@ export const snakeCaseToCamelCase = <T extends string>(str: T): SnakeToCamelCase
     str.replace(
       /(?!^)_(.)/g,
       (_, char) => char.toUpperCase()
-    ) as SnakeToCamelCase<T>
-  );
+    )
+  ) as SnakeToCamelCase<T>;
 
 
 interface BasicAuth {

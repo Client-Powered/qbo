@@ -79,6 +79,7 @@ export const upsert = ({
     return err(error);
   }
   return ok({
+    // @ts-ignore
     entity: data[Entity],
     time: data.time,
     intuitTid: data.intuitTid
