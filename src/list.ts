@@ -16,7 +16,6 @@ import {
 import { Config } from "./lib/config";
 import { v4 as uuid } from "uuid";
 import { InvalidQueryArgsError, QBOError } from "./lib/errors/error-classes";
-import { withResult } from "ts-error-as-value";
 
 export const combine = <T extends QBOQueryableEntityType>(
   Entity: SnakeToCamelCase<T>,
@@ -88,6 +87,14 @@ export const optsToListQueryCondition = <T extends QBOQueryableEntityType>(opts:
     queryConditionItems.push(`orderby ${String(opts.asc)} asc`);
   } else if (opts.desc) {
     queryConditionItems.push(`orderby ${String(opts.desc)} desc`);
+  }
+
+  if (opts.offset) {
+    queryConditionItems.push(`startposition ${String(opts.offset)}`);
+  }
+
+  if (opts.limit) {
+    queryConditionItems.push(`maxresults ${String(opts.limit)}`);
   }
 
   return queryConditionItems.join(" ");

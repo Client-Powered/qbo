@@ -4,6 +4,10 @@ import { CustomerTypeQboData } from "../entity/customer-type";
 import { EmployeeQboData } from "../entity/employee";
 import { NameReportTableTransactionsListColumnQboData } from "../entity/report";
 import { AccountQboData } from "../entity/account";
+import { BillQboData } from "../entity/bill";
+import { ItemQboData } from "../entity/item";
+import { PurchaseOrderQboData } from "../entity/purchase-order";
+import { VendorQboData } from "../entity/vendor";
 
 export interface Tokens {
   access_token: string,
@@ -82,14 +86,18 @@ export type QboQueryableEntityToType = {
   companyInfo: CompanyInfoQboData,
   customer: CustomerQboData,
   customerType: CustomerTypeQboData,
-  employee: EmployeeQboData
+  employee: EmployeeQboData,
+  item: ItemQboData,
+  vendor: VendorQboData,
+  bill: BillQboData,
+  purchaseOrder: PurchaseOrderQboData
 };
 
 /** Gets the entity object type from the entity name  */
 export type GetQBOQueryableEntityType<T extends QBOQueryableEntityType> =
   T extends keyof QboQueryableEntityToType ? QboQueryableEntityToType[T] : {
-    Id: string,
-    SyncToken: string,
+    Id?: string,
+    SyncToken?: string,
     [k: string]: unknown
   };
 
