@@ -3,8 +3,8 @@
   "version": "0.2.191",
   "description": "A client for interfacing with the QBO API.",
   "repository": "https://github.com/Client-Powered/qbo",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "typings": "src/index.ts",
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "start": "node --require ts-node/register --require @babel/register src/_local.ts",
