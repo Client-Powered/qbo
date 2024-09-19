@@ -1,10 +1,10 @@
 {
-  "name": "qbo",
-  "version": "0.2.191",
-  "description": "A client for interfacing with the QBO API.",
-  "repository": "https://github.com/Client-Powered/qbo",
-  "main": "src/index.ts",
-  "typings": "src/index.ts",
+  "name": "@herobullion/qbo",
+  "version": "0.3",
+  "description": "A client for interfacing with the QBO API. Based on the qbo package.",
+  "repository": "https://github.com/herobullion/qbo",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "start": "node --require ts-node/register --require @babel/register src/_local.ts",
@@ -12,9 +12,14 @@
     "setup-publish": "rm -rf dist && npx tsc"
   },
   "author": "Charles Anderson",
+  "contributors": [
+    {"name":  "Charles Anderson"},
+    {"name":  "Shaun Ek"},
+    {"name":  "Farjad Ahmad"}
+  ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/your-username/qbo-api/issues"
+    "url": "https://github.com/herobullion/qbo/issues"
   },
   "engines": {
     "node": ">=16.0.0"

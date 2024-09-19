@@ -1,15 +1,17 @@
 # QBO
 
-https://www.npmjs.com/package/qbo
+This package, https://www.npmjs.com/package/@herobullion/qbo, is based off of https://www.npmjs.com/package/qbo by Client Powered, with some modifications to make it more useful for our purposes at Hero Bullion.
+
+The purpose is to provide a simple interface for interacting with the Quickbooks Online API with Typescript. 
 
 ## Installation
 ```bash
-yarn add qbo
+yarn add @herobullion/qbo
 ```
 or 
 
 ```bash
-npm install qbo
+npm install @herobullion/qbo
 ```
 ----
 
@@ -17,7 +19,7 @@ npm install qbo
 
 #### Initializing the client
 ```typescript
-import * as qbo from 'qbo';
+import * as qbo from '@herobullion/qbo';
 
 const qboAPI = await qbo.client({
   access_token: "<QBO access token>", // Get this from completing OAuth2 flow with QBO
@@ -187,6 +189,10 @@ Currently supported record entities are:
 - company_info - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/companyinfo
 - customer - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customer
 - employee - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/employee
+- item = https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/item
+- vendor - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/vendor
+- purchase_order - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/purchaseorder
+- bill - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/bill
 
 Currently supported report entities are:
 
