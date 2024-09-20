@@ -158,6 +158,30 @@ const updatedCustomer = await qboAPI.upsert({
 
 ---
 
+### remove
+*Remove a QBO record*
+#### arguments
+- entity (string): the QBO entity
+- record (object): the object of the record you want to delete
+
+```ts
+// querying a customer record to update it
+const customer_25 = await qboAPI.read({
+  entity: "customer",
+  entity_id: "25"
+});
+
+// updating the primary phone number property of the customer with id "25"
+const updatedCustomer = await qboAPI.remove({
+  entity: "customer",
+  record: {
+    ...customer_25,
+  }
+});
+```
+
+---
+
 ### other methods and accessors
 #### refreshAccessToken
 *Refreshes the current access token*
@@ -193,6 +217,7 @@ Currently supported record entities are:
 - vendor - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/vendor
 - purchase_order - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/purchaseorder
 - bill - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/bill
+- inventory_adjustment - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/inventoryadjustment
 
 Currently supported report entities are:
 
