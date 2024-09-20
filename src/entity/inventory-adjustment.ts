@@ -9,21 +9,21 @@ export interface InventoryAdjustmentQboData {
   domain?: string,
   sparse?: boolean,
   TxnDate?: string,
-  "PrivateNote"?: string,
-  "AdjustAccountRef"?: {
-    "name"?: string,
-    "value": string
+  PrivateNote?: string,
+  AdjustAccountRef?: {
+    name?: string,
+    value: string
   },
-  "Line"?: InventoryAdjustmentLineQboData[]
+  Line?: InventoryAdjustmentLineQboData[]
 }
 
 export interface InventoryAdjustmentLineQboData {
   DetailType: "ItemAdjustmentLineDetail",
-  "ItemAdjustmentLineDetail": {
-    "QtyDiff": number,
-    "ItemRef": {
+  ItemAdjustmentLineDetail: {
+    QtyDiff: number,
+    ItemRef: {
       name?: string,
-      "value": string
+      value: string
     }
   }
 }

@@ -22,14 +22,24 @@ interface RemoveInit {
   initFetchFn: typeof fetch,
   config: Config
 }
+
+export type RemoveEntityArgs = {
+  Id: string,
+  SyncToken: string
+};
 export interface RemoveArgs<T extends QBOQueryableEntityType> {
   entity: T,
-  record: GetQBOQueryableEntityType<T>,
+  record: RemoveEntityArgs,
   fetchFn?: typeof fetch
 }
+export type RemoveEntityResponse = {
+  Id: string,
+  status: string,
+  domain: string
+};
 
 export type RemoveResponse<T extends QBOQueryableEntityType> = {
-  entity: GetQBOQueryableEntityType<T>,
+  entity: RemoveEntityResponse,
   time: number,
   intuitTid: string | null
 };

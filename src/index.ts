@@ -15,7 +15,7 @@ export type { ReportArgs, ReportResponse } from "./report";
 export type { ReadArgs, ReadResponse } from "./read";
 export type { UpsertArgs, UpsertResponse } from "./upsert";
 export type { ListArgs, ListResponse } from "./list";
-export type { RemoveArgs, RemoveResponse } from "./remove";
+export type { RemoveArgs, RemoveResponse, RemoveEntityArgs, RemoveEntityResponse } from "./remove";
 
 export interface ClientArgs {
   client_id: string,
