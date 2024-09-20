@@ -4,6 +4,7 @@ import { getConfig } from "./lib/config";
 import { list, ListArgs, ListResponse } from "./list";
 import { upsert, UpsertArgs, UpsertResponse } from "./upsert";
 import { read, ReadArgs, ReadResponse } from "./read";
+import { remove, RemoveArgs, RemoveResponse } from "./remove";
 import { report, ReportArgs, ReportResponse } from "./report";
 import "ts-error-as-value/lib/globals";
 import { QBOError } from "./lib/errors/error-classes";
@@ -14,6 +15,7 @@ export type { ReportArgs, ReportResponse } from "./report";
 export type { ReadArgs, ReadResponse } from "./read";
 export type { UpsertArgs, UpsertResponse } from "./upsert";
 export type { ListArgs, ListResponse } from "./list";
+export type { RemoveArgs, RemoveResponse } from "./remove";
 
 export interface ClientArgs {
   client_id: string,
@@ -52,6 +54,12 @@ export interface QboClient {
     record,
     fetchFn
   }: UpsertArgs<T>): Promise<Result<UpsertResponse<T>, QBOError>>,
+
+  remove<T extends QBOQueryableEntityType>({
+    entity,
+    record,
+    fetchFn
+  }: RemoveArgs<T>): Promise<Result<RemoveResponse<T>, QBOError>>,
 
   /** @desc Query a QBO report of a given type with optional query parameters */
   report<T extends QBOReportEntityType>({
@@ -155,6 +163,7 @@ export const client = async ({
     list: list({ config, initFetchFn: fetchFn }),
     upsert: upsert({ config, initFetchFn: fetchFn }),
     read: read({ config, initFetchFn: fetchFn }),
-    report: report({ config, initFetchFn: fetchFn })
+    report: report({ config, initFetchFn: fetchFn }),
+    remove: remove({ config, initFetchFn: fetchFn })
   };
 };
