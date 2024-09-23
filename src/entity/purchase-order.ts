@@ -6,6 +6,17 @@ export interface PurchaseOrderQboData {
     CreateTime?: string,
     LastUpdatedTime?: string
   },
+  POEmail?: {
+    Address?: string
+  },
+  VendorAddr?: {
+    Line1?: string,
+    Line2?: string,
+    Line3?: string,
+    PostalCode?: string,
+    City?: string,
+    Country?: string
+  },
   domain?: string,
   sparse?: boolean,
   EmailStatus?: string,
