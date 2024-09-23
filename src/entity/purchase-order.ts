@@ -15,6 +15,7 @@ export interface PurchaseOrderQboData {
     Line3?: string,
     PostalCode?: string,
     City?: string,
+    CountrySubDivisionCode?: string,
     Country?: string
   },
   domain?: string,
