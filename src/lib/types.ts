@@ -8,6 +8,7 @@ import { BillQboData } from "../entity/bill";
 import { ItemQboData } from "../entity/item";
 import { PurchaseOrderQboData } from "../entity/purchase-order";
 import { VendorQboData } from "../entity/vendor";
+import { InventoryAdjustmentQboData } from "../entity/inventory-adjustment";
 
 export interface Tokens {
   access_token: string,
@@ -75,7 +76,8 @@ const _qboEntities = [
   "transfer",
   "vendor",
   "vendor_credit",
-  "exchange_rate"
+  "exchange_rate",
+  "inventory_adjustment"
 ] as const;
 
 export type QBOQueryableEntityType = (typeof _qboEntities)[number];
@@ -90,7 +92,8 @@ export type QboQueryableEntityToType = {
   item: ItemQboData,
   vendor: VendorQboData,
   bill: BillQboData,
-  purchaseOrder: PurchaseOrderQboData
+  purchaseOrder: PurchaseOrderQboData,
+  inventoryAdjustment: InventoryAdjustmentQboData
 };
 
 /** Gets the entity object type from the entity name  */

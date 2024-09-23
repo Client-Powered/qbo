@@ -13,9 +13,15 @@
   },
   "author": "Charles Anderson",
   "contributors": [
-    {"name":  "Charles Anderson"},
-    {"name":  "Shaun Ek"},
-    {"name":  "Farjad Ahmad"}
+    {
+      "name": "Charles Anderson"
+    },
+    {
+      "name": "Shaun Ek"
+    },
+    {
+      "name": "Farjad Ahmad"
+    }
   ],
   "license": "ISC",
   "bugs": {
