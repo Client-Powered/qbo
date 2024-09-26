@@ -1,6 +1,6 @@
 {
   "name": "@herobullion/qbo",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A client for interfacing with the QBO API. Based on the qbo package.",
   "repository": "https://github.com/herobullion/qbo",
   "main": "dist/index.js",
