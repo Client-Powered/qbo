@@ -21,11 +21,12 @@ export type QueryOperatorType =
 
 type Capitalize<S extends string> = S extends `${infer T}${infer U}` ? `${Uppercase<T>}${U}` : never;
 
-export type SnakeToCamelCase<Key extends string> = Capitalize<
+export type SnakeToCamelCase_<Key extends string> =
 Key extends `${infer FirstPart}_${infer FirstLetter}${infer LastPart}`
-  ? `${FirstPart}${Uppercase<FirstLetter>}${SnakeToCamelCase<LastPart>}`
-  : Key
->;
+  ? `${Lowercase<FirstPart>}${Uppercase<FirstLetter>}${SnakeToCamelCase_<LastPart>}`
+  : Lowercase<Key>;
+
+export type SnakeToCamelCase<Key extends string> = Capitalize<SnakeToCamelCase_<Key>>;
 
 export interface RefreshTokenResponse {
   x_refresh_token_expires_in: number,
