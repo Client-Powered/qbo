@@ -19,14 +19,13 @@ export const makeFormBody = (obj: object): URLSearchParams => {
   return formBody;
 };
 
-export const snakeCaseToCamelCase = <T extends string>(str: T): SnakeToCamelCase<T> =>
-  title(
-    str.replace(
-      /(?!^)_(.)/g,
-      (_, char) => char.toUpperCase()
-    ) as SnakeToCamelCase<T>
+export const snakeCaseToCamelCase = <T extends string>(str: T): SnakeToCamelCase<T> => {
+  const replaced = str.replace(
+    /(?!^)_(.)/g,
+    (_, char) => char.toUpperCase()
   );
-
+  return title(replaced) as SnakeToCamelCase<T>;
+};
 
 interface BasicAuth {
   client_id: string,
@@ -117,7 +116,7 @@ export const handleQBOError = (e: any): Result<never, QBOError> => {
   return err(ensureQboError(e));
 };
 
-export const getJson = <T extends { intuitTid: string | null }>() => async (res: Response): Promise<Result<T, QBOError>> => {
+export const getJson = <T>() => async (res: Response): Promise<Result<T, QBOError>> => {
   const intuitTid = res?.headers?.get("intuit_tid") ?? null;
   if (!res.ok) {
     return err(await getErrorFromResponse(res, intuitTid));

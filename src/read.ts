@@ -5,18 +5,31 @@ import {
   getSignalForTimeout,
   isQueryableEntity,
   makeRequestURL,
-  handleQBOError, ensureQboError, snakeCaseToCamelCase,
+  handleQBOError, snakeCaseToCamelCase,
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
 import { InvalidQueryArgsError, QBOError } from "./lib/errors/error-classes";
 
-export type QueryResponse<T extends QBOQueryableEntityType> = {
+export type QueryResponseJustEntity<T extends QBOQueryableEntityType> = {
   [K in T as SnakeToCamelCase<K> extends SnakeToCamelCase<T> ? SnakeToCamelCase<T> : never]: GetQBOQueryableEntityType<T>
-} & {
-  time: number,
-  intuitTid: string | null
 };
+
+export type QueryResponse<T extends QBOQueryableEntityType> =
+   & {
+     time: number,
+     intuitTid: string | null
+   }
+   & QueryResponseJustEntity<T>;
+
+const getEntityData = <T extends QBOQueryableEntityType>(
+  Entity: SnakeToCamelCase<T>,
+  data: QueryResponseJustEntity<T>
+): GetQBOQueryableEntityType<T> => {
+  const entityData = data[Entity];
+  return entityData as GetQBOQueryableEntityType<T>;
+};
+
 
 interface ReadInit {
   config: Config,
@@ -80,7 +93,7 @@ export const read = ({
     return err(error);
   }
   return ok({
-    entity: data[Entity],
+    entity: getEntityData(Entity, data),
     time: data.time,
     intuitTid: data.intuitTid
   });
