@@ -139,7 +139,7 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
     }
   });
   if (makeRequestError) {
-    throw makeRequestError;
+    return err(makeRequestError);
   }
 
   const {
