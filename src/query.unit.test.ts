@@ -1,7 +1,7 @@
 import { combine, fetchListQuery, optsToListQueryCondition, QueryOptsBase, QueryOptsInternal } from "./list";
 import { QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
 import { Config } from "./lib/config";
-import "ts-error-as-value/lib/globals";
+import "ts-err-as-value/lib/globals";
 
 describe("combine", () => {
   it("should correctly combine two QueryResponses", () => {

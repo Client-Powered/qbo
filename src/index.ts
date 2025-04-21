@@ -5,8 +5,9 @@ import { list, ListArgs, ListResponse } from "./list";
 import { upsert, UpsertArgs, UpsertResponse } from "./upsert";
 import { read, ReadArgs, ReadResponse } from "./read";
 import { report, ReportArgs, ReportResponse } from "./report";
-import "ts-error-as-value/lib/globals";
+import "ts-err-as-value/globals";
 import { QBOError } from "./lib/errors/error-classes";
+export * from "./lib/types";
 
 export * as QBOError from "./lib/errors/error-classes";
 export type { Tokens, QBOQueryableEntityType, QBOReportEntityType, GetQBOQueryableEntityType, GetEntitySpecificReport } from "./lib/types";

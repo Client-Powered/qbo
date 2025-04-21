@@ -8,7 +8,7 @@ import { Config } from "./config";
 import { isValid, parseISO } from "date-fns";
 import { getErrorFromResponse } from "./errors";
 import { QBOError, RequestTimeoutError, UnknownQBOError } from "./errors/error-classes";
-import { withResult } from "ts-error-as-value";
+import { withResult } from "ts-err-as-value";
 
 
 export const makeFormBody = (obj: object): URLSearchParams => {
