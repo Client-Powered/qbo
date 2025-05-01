@@ -102,6 +102,7 @@ export type GetQBOQueryablePropsForEntityType<
 
 const _reportEntityNames = [
   "account_list",
+  "account_list_detail",
   "aged_payable_detail",
   "aged_payables",
   "aged_receivable_detail",

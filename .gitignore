@@ -9,3 +9,4 @@ reports
 src/_local.ts
 !src/lib
 types
+!src/reports

@@ -132,7 +132,11 @@ export const isISODateString = (s: any): s is string => {
     return false;
   }
   try {
-    return isValid(parseISO(s));
+    const date = parseISO(s);
+    if (date.getUTCFullYear() < 1970 || date.getUTCFullYear() > 2100) {
+      return false;
+    }
+    return isValid(date);
   } catch (error) {
     return false;
   }

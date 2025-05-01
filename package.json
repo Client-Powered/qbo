@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "ts-err-as-value": "^0.1.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.4",
@@ -42,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "app-root-path": "^3.1.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
@@ -52,6 +54,7 @@
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.3",
     "ts-node": "latest",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "zod-to-json-schema": "^3.24.5"
   }
 }
