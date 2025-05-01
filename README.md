@@ -193,13 +193,4 @@ Currently supported record entities are:
 - customer - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customer
 - employee - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/employee
 
-Currently supported report entities are:
-
-- account_list - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/accountlistdetail
-- transactions_list - https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/transactionlist
-- unknown (A fallthrough for adding basic query options like date_macro and sort_order for all other report types)
-
-This will likely be expanded in the near future as we integrate more entity types from Quickbooks Online into Client Powered. In the meantime, please feel free to create PRs to add additional types to the `src/entity` folder as needed!
-
-
-
+All report entities are supported.
