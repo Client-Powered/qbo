@@ -11,6 +11,11 @@ or
 ```bash
 npm install qbo
 ```
+or
+
+```bash
+pnpm install qbo
+```
 ----
 
 ## Usage
