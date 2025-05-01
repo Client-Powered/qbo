@@ -1,5 +1,5 @@
 import { discovery, DiscoveryConfig } from "./discovery";
-import { withResult } from "ts-error-as-value";
+import { withResult } from "ts-err-as-value";
 
 export interface Config extends DiscoveryConfig {
   REFRESH_TOKEN: string | null,

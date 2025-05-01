@@ -8,3 +8,4 @@ reports
 /dist/
 src/_local.ts
 !src/lib
+types
