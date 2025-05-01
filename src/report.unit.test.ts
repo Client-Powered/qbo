@@ -1,4 +1,4 @@
-import { ReportQuery } from "./reports";
+import type { ReportQuery } from "./reports";
 import { createReportOpts } from "./report";
 import { format } from "date-fns";
 import "ts-err-as-value/globals";
@@ -15,6 +15,7 @@ describe("createReportOpts", () => {
       department: "some-department"
     };
     const result = createReportOpts({
+      entity: "transaction_list",
       opts
     });
     expect(result).toStrictEqual({
@@ -33,6 +34,7 @@ describe("createReportOpts", () => {
       end_date: "2023-09-20"
     };
     const result = createReportOpts({
+      entity: "transaction_list",
       opts
     });
     expect(result).toEqual({
@@ -46,6 +48,7 @@ describe("createReportOpts", () => {
       transaction_type: "Check"
     };
     const result = createReportOpts({
+      entity: "transaction_list",
       opts
     });
     expect(result).toStrictEqual({

@@ -1,5 +1,5 @@
 export { isCommasOption, CommasOptionItem } from "./utils";
-export * from "./types";
+export type * from "./types";
 export * as optsByEntity from "./opts";
 
 import * as opts from "./opts";
