@@ -1,7 +1,8 @@
-import { ReportQuery } from "./report-query";
+import { ReportQuery } from "./reports";
 import { createReportOpts } from "./report";
 import { format } from "date-fns";
-import "ts-err-as-value/lib/globals";
+import "ts-err-as-value/globals";
+import { UTCDate } from "@date-fns/utc";
 
 
 describe("createReportOpts", () => {
@@ -23,14 +24,18 @@ describe("createReportOpts", () => {
   });
 
   it("should convert date properties correctly", () => {
-    const now = format(new Date(), "yyyy-MM-dd");
+    const now = format(new Date("2023-09-20"), "yyyy-MM-dd", {
+      in: arg => {
+        return new UTCDate(arg);
+      }
+    });
     const opts: ReportQuery<"transaction_list"> = {
-      end_date: new Date()
+      end_date: "2023-09-20"
     };
     const result = createReportOpts({
       opts
     });
-    expect(result).toStrictEqual({
+    expect(result).toEqual({
       end_date: now
     });
   });

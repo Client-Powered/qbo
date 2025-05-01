@@ -37,7 +37,7 @@ export interface RefreshTokenResponse {
   intuitTid:                  string | null
 }
 
-const _qboEntities = [
+export const qboEntities = [
   "account",
   "attachable",
   "bill",
@@ -75,8 +75,8 @@ const _qboEntities = [
   "exchange_rate"
 ] as const;
 
-export type QBOQueryableEntityType = (typeof _qboEntities)[number];
-export const qboQueryableEntities: QBOQueryableEntityType[] = _qboEntities as any;
+export type QBOQueryableEntityType = (typeof qboEntities)[number];
+// export const qboQueryableEntities: QBOQueryableEntityType[] = _qboEntities as any;
 
 export type QboQueryableEntityToType = {
   account: AccountQboData,
@@ -100,7 +100,7 @@ export type GetQBOQueryablePropsForEntityType<
 > =
   Exclude<GetQBOQueryableEntityType<T>[K], undefined> extends { Id: any } ? never : T;
 
-const _reportEntityNames = [
+export const qboReportEntities = [
   "account_list",
   "account_list_detail",
   "aged_payable_detail",
@@ -127,16 +127,15 @@ const _reportEntityNames = [
   "transaction_list_by_vendor",
   "transaction_list_with_splits",
   "trial_balance",
-  "trial_balance_fr",
   "vendor_balance",
   "vendor_balance_detail",
   "vendor_expenses"
 ] as const;
 
 
-export type QBOReportEntityType = (typeof _reportEntityNames)[number];
+export type QBOReportEntityType = (typeof qboReportEntities)[number];
 
-export const qboReportEntities: QBOReportEntityType[] = _reportEntityNames as any;
+// export const qboReportEntities: QBOReportEntityType[] = _reportEntityNames as any;
 
 /** Gets the report object type from the entity name  */
 export type GetEntitySpecificReport<T extends QBOReportEntityType> = Omit<NameReportTableTransactionsListColumnQboData, "Header"> & {

@@ -1,4 +1,4 @@
-import { GetQBOQueryableEntityType, QBOQueryableEntityType, SnakeToCamelCase, SnakeToCamelCase_ } from "./lib/types";
+import { GetQBOQueryableEntityType, qboEntities, QBOQueryableEntityType, SnakeToCamelCase, SnakeToCamelCase_ } from "./lib/types";
 import { Config } from "./lib/config";
 import {
   getJson,
@@ -57,7 +57,7 @@ export const upsert = ({
   fetchFn: _fetchFn
 }: UpsertArgs<T>): Promise<Result<UpsertResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    throw new Error(`Invalid entity: ${entity}`);
+    return err(new Error(`Invalid entity: ${entity} given to upsert. Expected one of ${qboEntities.join(", ")}`));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 

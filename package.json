@@ -23,6 +23,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@date-fns/utc": "^2.1.0",
     "ts-err-as-value": "^0.1.0",
     "uuid": "^9.0.0",
     "zod": "^3.24.3"
@@ -43,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "app-root-path": "^3.1.0",
+    "babel-jest": "^29.7.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.25.0",

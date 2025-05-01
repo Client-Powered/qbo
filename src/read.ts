@@ -1,4 +1,4 @@
-import { GetQBOQueryableEntityType, QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
+import { GetQBOQueryableEntityType, qboEntities, QBOQueryableEntityType, SnakeToCamelCase } from "./lib/types";
 import { Config } from "./lib/config";
 import {
   getJson,
@@ -57,7 +57,7 @@ export const read = ({
   fetchFn: _fetchFn
 }: ReadArgs<T>): Promise<Result<ReadResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`, null));
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity} given to read. Expected one of ${qboEntities.join(", ")}`, null));
   } else if (Number.isNaN(Number(entity_id))) {
     return err(new InvalidQueryArgsError(`Invalid entity id: ${entity_id}, should be a string of numbers`, null));
   }
