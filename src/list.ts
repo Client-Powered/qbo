@@ -1,6 +1,6 @@
 import {
   GetQBOQueryableEntityType,
-  GetQBOQueryablePropsForEntityType,
+  GetQBOQueryablePropsForEntityType, qboEntities,
   QBOQueryableEntityType,
   QueryOperatorType, SnakeToCamelCase
 } from "./lib/types";
@@ -157,19 +157,25 @@ export const fetchListQuery = async <T extends QBOQueryableEntityType>({
   if (!opts.fetch_all || getEntityData(Entity, data.QueryResponse)?.length !== opts.limit) {
     return ok(data);
   } else {
+    const {
+      data: next, error: nextError
+    } = await fetchListQuery({
+      config,
+      opts: {
+        ...opts,
+        offset: opts.offset + (getEntityData(Entity, data.QueryResponse)?.length ?? 0)
+      },
+      Entity,
+      headers,
+      fetchFn
+    });
+    if (nextError) {
+      return err(nextError);
+    }
     return ok(combine(
       Entity,
       data,
-      (await fetchListQuery({
-        config,
-        opts: {
-          ...opts,
-          offset: opts.offset + (getEntityData(Entity, data.QueryResponse)?.length ?? 0)
-        },
-        Entity,
-        headers,
-        fetchFn
-      })).successOrThrow()
+      next
     ));
   }
 };
@@ -201,7 +207,7 @@ export const list = ({
   fetchFn: _fetchFn
 }: ListArgs<T>): Promise<Result<ListResponse<T>, QBOError>> => {
   if (!isQueryableEntity(entity)) {
-    return err(new InvalidQueryArgsError(`Invalid entity: ${entity}`, null));
+    return err(new InvalidQueryArgsError(`Invalid entity: ${entity} given to list. Expected one of ${qboEntities.join(", ")}`, null));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 

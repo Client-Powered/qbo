@@ -114,7 +114,7 @@ export const client = async ({
     async revokeAccess(tokenType: "REFRESH" | "ACCESS") {
       const token = tokenType === "REFRESH" ? config.REFRESH_TOKEN : config.ACCESS_TOKEN;
       if (!token) {
-        throw new Error(`No ${tokenType} token found to revoke`);
+        return err(new Error(`No ${tokenType} token found to revoke`));
       }
       const {
         error: revokeError

@@ -1,4 +1,4 @@
-import { GetEntitySpecificReport, QBOReportEntityType } from "./lib/types";
+import { GetEntitySpecificReport, qboReportEntities, QBOReportEntityType } from "./lib/types";
 import { Config } from "./lib/config";
 import {
   getJson,
@@ -10,32 +10,51 @@ import {
   tokenAuth
 } from "./lib/utils";
 import { v4 as uuid } from "uuid";
-import { isCommasOption, ReportQuery } from "./report-query";
+import { isCommasOption, optsByEntity, ReportQuery } from "./reports";
 import { format, parseISO } from "date-fns";
 import { QBOError } from "./lib/errors/error-classes";
+import { UTCDate } from "@date-fns/utc";
 
 interface CreateReportOpts<T extends QBOReportEntityType> {
+  entity: T,
   opts?: ReportQuery<T>
 }
 export const createReportOpts = <T extends QBOReportEntityType>({
-  opts
-}: CreateReportOpts<T>): Record<string, string> | undefined => {
-  if (!opts) {
-    return;
+  entity,
+  opts: _opts
+}: CreateReportOpts<T>): Result<Record<string, string> | void> => {
+  if (!_opts) {
+    return ok<void>();
   }
-  const newOpts: Record<string, string> = {};
-  for (const [ key, value ] of Object.entries(opts)) {
-    if (isCommasOption(key)) {
-      newOpts[key] = Array.isArray(value) ? value.join(",") : value;
-    } else if (value instanceof Date) {
-      newOpts[key] = format(value, "yyyy-MM-dd");
-    } else if (isISODateString(value)) {
-      newOpts[key] = format(parseISO(value), "yyyy-MM-dd");
-    } else {
-      newOpts[key] = value;
+  const {
+    data: opts, error, success
+  } = optsByEntity[entity].safeParse(_opts);
+  if (!success || error || !opts) {
+    return err(new Error(`Invalid report query options: ${error.format()}`));
+  }
+  try {
+    const newOpts: Record<string, string> = {};
+    for (const [ key, value ] of Object.entries(opts)) {
+      if (isCommasOption(key)) {
+        newOpts[key] = Array.isArray(value) ? value.join(",") : typeof value === "string" ? value : String(value);
+      } else if (value instanceof Date) {
+        const utcDate = new UTCDate(value);
+        console.log(utcDate.toLocaleString());
+        newOpts[key] = format(utcDate, "yyyy-MM-dd");
+      } else if (isISODateString(value)) {
+        newOpts[key] = format(parseISO(value, {
+          in: arg => {
+            return new UTCDate(arg);
+          }
+        }), "yyyy-MM-dd");
+      } else {
+        newOpts[key] = Array.isArray(value) ? value.join(",") : typeof value === "string" ? value : String(value);
+      }
     }
+    return ok(newOpts);
+  } catch (e) {
+    return err(new Error(`Error creating report options: ${(e as Error)?.message ?? "Unknown error"}`));
   }
-  return newOpts;
 };
 
 interface ReportInit {
@@ -60,11 +79,16 @@ export const report = ({
   fetchFn: _fetchFn
 }: ReportArgs<T>): Promise<Result<ReportResponse<T>, QBOError>> => {
   if (!isReportEntity(entity)) {
-    throw new Error(`Invalid entity: ${entity}`);
+    return err(new Error(`Invalid entity: ${entity} given to report. Expected one of ${qboReportEntities.join(", ")}`));
   }
   const fetchFn = _fetchFn ?? initFetchFn;
 
-  const queryParams = createReportOpts<T>({ opts });
+  const {
+    error: optsError, data: queryParams
+  } = createReportOpts<T>({ entity, opts });
+  if (optsError) {
+    return err(new Error(`Error parsing query params in opts property for report type...\n${optsError.message}\n${optsError?.stack}`));
+  }
 
   const {
     error: makeRequestError, data: url

@@ -1,5 +1,5 @@
 import {
-  qboQueryableEntities,
+  qboEntities,
   QBOQueryableEntityType,
   qboReportEntities,
   QBOReportEntityType, SnakeToCamelCase
@@ -46,7 +46,7 @@ export const tokenAuth = ({
   `Bearer ${config.ACCESS_TOKEN}`;
 
 export const isQueryableEntity = (val: any): val is QBOQueryableEntityType =>
-  typeof val === "string" && qboQueryableEntities.includes(val as any);
+  typeof val === "string" && qboEntities.includes(val as any);
 
 export const isReportEntity = (val: any): val is QBOReportEntityType =>
   typeof val === "string" && qboReportEntities.includes(val as any);
@@ -132,7 +132,11 @@ export const isISODateString = (s: any): s is string => {
     return false;
   }
   try {
-    return isValid(parseISO(s));
+    const date = parseISO(s);
+    if (date.getUTCFullYear() < 1970 || date.getUTCFullYear() > 2100) {
+      return false;
+    }
+    return isValid(date);
   } catch (error) {
     return false;
   }
