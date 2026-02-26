@@ -86,7 +86,7 @@ export const transaction_list_by_customer = z.object({
   .merge(propertySchema_term)
   .merge(propertySchema_startEndCreateDate)
   .merge(propertySchema_transactionType)
+  .merge(propertySchema_sortOrder)
   .merge(propertySchema_groupBy);
 
 export type TransactionListByCustomerType = z.infer<typeof transaction_list_by_customer>;
-

@@ -64,7 +64,8 @@ export const transaction_list = z.object({
   columns: z.enum(transactionList_columnTypes).optional(),
   sort_by: z.enum(transactionList_columnTypes).optional(),
   printed: z.enum([ "Printed", "To_be_printed" ]).optional(),
-  cleared: z.enum([ "Cleared", "Uncleared", "Reconciled", "Deposited" ]).optional()
+  cleared: z.enum([ "Cleared", "Uncleared", "Reconciled", "Deposited" ]).optional(),
+  name: z.string().optional()
 })
   .merge(propertySchema_dateMacro)
   .merge(propertySchema_paymentMethod)
@@ -85,7 +86,7 @@ export const transaction_list = z.object({
   .merge(propertySchema_term)
   .merge(propertySchema_startEndCreateDate)
   .merge(propertySchema_transactionType)
+  .merge(propertySchema_sortOrder)
   .merge(propertySchema_groupBy);
 
 export type TransactionListType = z.infer<typeof transaction_list>;
-

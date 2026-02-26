@@ -11,7 +11,7 @@ import {
   propertySchema_sortOrder,
   propertySchema_summarizeColumnBy,
   propertySchema_accountingMethod,
-  propertySchema_reportDate, propertySchema_startEndDueDate
+  propertySchema_reportDate, propertySchema_startEndDueDate, propertySchema_agingMethod, propertySchema_arPaid, propertySchema_term
 } from "./_schemas";
 
 export const customerBalanceDetail_columnTypes = [
@@ -46,15 +46,17 @@ export const customerBalanceDetail_columnTypes = [
 
 export const customer_balance_detail = z.object({
   custom1: z.string().optional().describe("Filter by the specified custom field as defined by the CustomField attribute in transaction entities where supported."),
-  columns: z.enum(customerBalanceDetail_columnTypes).optional()
+  columns: z.enum(customerBalanceDetail_columnTypes).optional(),
+  sort_by: z.enum(customerBalanceDetail_columnTypes).optional(),
+  shipvia: z.string().optional().describe("Filter by the shipping method as stored in Invoice.ShipMethodRef.Name.")
 })
   .merge(propertySchema_startEndDueDate)
   .merge(propertySchema_customer)
-  .merge(propertySchema_accountingMethod)
-  .merge(propertySchema_dateMacro)
+  .merge(propertySchema_term)
+  .merge(propertySchema_arPaid)
+  .merge(propertySchema_agingMethod)
   .merge(propertySchema_reportDate)
   .merge(propertySchema_sortOrder)
-  .merge(propertySchema_summarizeColumnBy)
   .merge(propertySchema_department);
 
 export type CustomerBalanceDetailType = z.infer<typeof customer_balance_detail>;

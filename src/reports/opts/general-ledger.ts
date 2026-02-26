@@ -4,7 +4,7 @@ import {
   propertySchema_dateMacro,
   propertySchema_reportBasis,
   propertySchema_customer,
-  propertySchema_department, propertySchema_account, propertySchema_accountingMethod, propertySchema_sourceAccount, propertySchema_accountType, propertySchema_summarizeColumnBy, propertySchema_vendor, propertySchema_class
+  propertySchema_department, propertySchema_account, propertySchema_accountingMethod, propertySchema_sourceAccount, propertySchema_accountType, propertySchema_summarizeColumnBy, propertySchema_vendor, propertySchema_class, propertySchema_sortOrder
 } from "./_schemas";
 
 export const generalLedger_columnTypes = [
@@ -48,8 +48,10 @@ export const general_ledger = z.object({
   .merge(propertySchema_sourceAccount)
   .merge(propertySchema_startEndDate)
   .merge(propertySchema_dateMacro)
+  .merge(propertySchema_accountingMethod)
   .merge(propertySchema_accountType)
   .merge(propertySchema_summarizeColumnBy)
+  .merge(propertySchema_sortOrder)
   .merge(propertySchema_department)
   .merge(propertySchema_vendor)
   .merge(propertySchema_class);

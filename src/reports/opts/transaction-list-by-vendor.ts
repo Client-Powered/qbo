@@ -79,12 +79,12 @@ export const transaction_list_by_vendor = z.object({
   .merge(propertySchema_apPaid)
   .merge(propertySchema_modDateMacro)
   .merge(propertySchema_createDateMacro)
-  .merge(propertySchema_customer)
+  .merge(propertySchema_vendor)
   .merge(propertySchema_qzurl)
   .merge(propertySchema_term)
   .merge(propertySchema_startEndCreateDate)
   .merge(propertySchema_transactionType)
+  .merge(propertySchema_sortOrder)
   .merge(propertySchema_groupBy);
 
 export type TransactionListByVendorType = z.infer<typeof transaction_list_by_vendor>;
-

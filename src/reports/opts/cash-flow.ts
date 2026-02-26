@@ -17,8 +17,7 @@ export const cashFlow_columnTypes = [
 ] as const;
 
 export const cash_flow = z.object({
-  columns: z.enum(cashFlow_columnTypes).optional().describe("Specifies which columns to include in the report"),
-  sort_by: z.enum(cashFlow_columnTypes).optional().describe("Specifies which column to sort by")
+  // No report-specific columns/sort_by in metadata for cash_flow
 })
   .merge(propertySchema_department)
   .merge(propertySchema_customer)
@@ -28,7 +27,6 @@ export const cash_flow = z.object({
   .merge(propertySchema_summarizeColumnBy)
   .merge(propertySchema_sortOrder)
   .merge(propertySchema_dateMacro)
-  .merge(propertySchema_startEndDate)
-  .merge(propertySchema_reportBasis);
+  .merge(propertySchema_startEndDate);
 
 export type CashFlowType = z.infer<typeof cash_flow>;

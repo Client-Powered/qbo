@@ -34,8 +34,7 @@ export const agedPayableDetail_columnTypes = [
 ] as const;
 
 export const aged_payable_detail = z.object({
-  sort_by: z.enum(agedPayableDetail_columnTypes).optional(),
-  columnTypes: z.enum(agedPayableDetail_columnTypes).optional(),
+  columns: z.enum(agedPayableDetail_columnTypes).optional(),
   shipvia: z.string().optional().describe("Filter by the shipping method as stored in Invoice.ShipMethodRef.Name. Supported Values: Any shipping method as sent in the Invoice.ShipMethodRef.Name attribute at Invoice create- or update-time."),
   custom1: z.string().optional().describe("Filter by the specified custom field as defined by the CustomField attribute in transaction entities where supported. Supported Values: Name of custom field."),
   custom2: z.string().optional(),
@@ -48,5 +47,4 @@ export const aged_payable_detail = z.object({
   .merge(propertySchema_reportDate)
   .merge(propertySchema_numPeriods)
   .merge(propertySchema_vendor)
-  .merge(propertySchema_pastDue)
-  .merge(propertySchema_agingMethod);
+  .merge(propertySchema_pastDue);

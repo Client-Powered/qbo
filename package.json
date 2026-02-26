@@ -1,6 +1,6 @@
 {
   "name": "qbo",
-  "version": "0.4.1",
+  "version": "0.4.11",
   "description": "A client for interfacing with the QBO API.",
   "repository": "https://github.com/Client-Powered/qbo",
   "main": "dist/index.js",
@@ -16,6 +16,7 @@
     "test": "jest",
     "setup-publish": "rm -rf dist && tsc",
     "script": "pnpm ts-node --project tsconfig.json",
+    "audit:reports:opts": "pnpm ts-node --project tsconfig.json tools/audit/report-opts-audit.ts",
     "prepublishOnly": "pnpm setup-publish",
     "publish-npm": "npm publish --access public"
   },
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "@date-fns/utc": "^2.1.0",
+    "date-fns": "^4.1.0",
     "ts-err-as-value": "^0.1.0",
     "uuid": "^9.0.0",
     "zod": "^3.24.3"
@@ -50,7 +52,6 @@
     "@typescript-eslint/parser": "^5.39.0",
     "app-root-path": "^3.1.0",
     "babel-jest": "^29.7.0",
-    "date-fns": "^4.1.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",

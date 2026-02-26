@@ -25,7 +25,6 @@ export const balance_sheet = z.object({})
   .merge(propertySchema_sortOrder)
   .merge(propertySchema_dateMacro)
   .merge(propertySchema_startEndDate)
-  .merge(propertySchema_reportBasis)
   .merge(propertySchema_qzurl)
   .merge(propertySchema_adjustedGainLoss);
 
