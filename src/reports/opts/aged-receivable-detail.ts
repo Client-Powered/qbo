@@ -1,13 +1,10 @@
 import { z } from "zod";
 import {
   propertySchema_agingMethod,
-  propertySchema_createDateMacro,
   propertySchema_customer,
-  propertySchema_dateMacro,
-  propertySchema_modDateMacro, propertySchema_numPeriods, propertySchema_pastDue, propertySchema_reportDate,
-  propertySchema_sortOrder,
+  propertySchema_numPeriods, propertySchema_pastDue, propertySchema_reportDate,
   propertySchema_startEndDate, propertySchema_startEndDueDate,
-  propertySchema_startEndModDate, propertySchema_term
+  propertySchema_term
 } from "./_schemas";
 
 export const agedReceivableDetail_columnTypes = [
@@ -41,19 +38,14 @@ export const aged_receivable_detail = z.object({
   custom1: z.string().optional().describe("Filter by the specified custom field as defined by the CustomField attribute in transaction entities where supported. Supported Values: Name of custom field."),
   custom2: z.string().optional(),
   custom3: z.string().optional(),
-  columns: z.enum(agedReceivableDetail_columnTypes).optional().describe("Specifies which columns to include in the report")
+  columns: z.enum(agedReceivableDetail_columnTypes).optional().describe("Specifies which columns to include in the report"),
+  aging_period: z.number().int().optional().describe("The number of days in the aging period.")
 })
   .merge(propertySchema_customer)
   .merge(propertySchema_term)
   .merge(propertySchema_reportDate)
   .merge(propertySchema_numPeriods)
   .merge(propertySchema_pastDue)
-  .merge(propertySchema_sortOrder)
-  .merge(propertySchema_dateMacro)
-  .merge(propertySchema_modDateMacro)
-  .merge(propertySchema_createDateMacro)
-  .merge(propertySchema_startEndDate)
-  .merge(propertySchema_startEndModDate)
   .merge(propertySchema_startEndDueDate)
   .merge(propertySchema_agingMethod);
 

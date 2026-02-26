@@ -16,7 +16,8 @@ export const accountList_columnTypes = [
 
 export const account_list = z.object({
   sort_by: z.enum(accountList_columnTypes).optional(),
-  columnTypes: z.enum(accountList_columnTypes).optional()
+  columns: z.enum(accountList_columnTypes).optional(),
+  account_status: z.string().optional()
 })
   .merge(propertySchema_accountType)
   .merge(propertySchema_sortOrder)

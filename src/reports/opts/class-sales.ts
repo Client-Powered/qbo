@@ -17,8 +17,7 @@ export const columnTypes = [
 ] as const;
 
 export const class_sales = z.object({
-  columns: z.enum(columnTypes).optional().describe("Specifies which columns to include in the report"),
-  sort_by: z.enum(columnTypes).optional().describe("Specifies which column to sort by")
+  // No report-specific columns/sort_by in metadata for class_sales
 })
   .merge(propertySchema_customer)
   .merge(propertySchema_class)
@@ -26,7 +25,6 @@ export const class_sales = z.object({
   .merge(propertySchema_department)
   .merge(propertySchema_summarizeColumnBy)
   .merge(propertySchema_accountingMethod)
-  .merge(propertySchema_sortOrder)
   .merge(propertySchema_dateMacro)
   .merge(propertySchema_startEndDate);
 

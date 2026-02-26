@@ -39,7 +39,8 @@ export const journalReport_columnTypes = [
 
 export const journal_report = z.object({
   columns: z.enum(journalReport_columnTypes).optional(),
-  sort_by: z.enum(journalReport_columnTypes).optional()
+  sort_by: z.enum(journalReport_columnTypes).optional(),
+  journal_code: z.string().optional()
 })
   .merge(propertySchema_startEndDate)
   .merge(propertySchema_dateMacro)

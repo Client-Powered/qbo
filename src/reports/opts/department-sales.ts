@@ -17,7 +17,7 @@ import {
 export const department_sales = z.object({})
   .merge(propertySchema_customer)
   .merge(propertySchema_accountingMethod)
-  .merge(propertySchema_startEndDueDate)
+  .merge(propertySchema_startEndDate)
   .merge(propertySchema_dateMacro)
   .merge(propertySchema_class)
   .merge(propertySchema_item)
